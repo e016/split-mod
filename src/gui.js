@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.1.4';
+var SplitVersion = '1.1.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -990,6 +990,7 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
     // hide categories
     if (cnf.hideCategories) {
         this.categories.hide();
+        this.extensionButton.hide();
     }
 
     // no sprites
@@ -1012,6 +1013,7 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
         this.categories.hide();
         this.palette.hide();
         this.paletteHandle.hide();
+        this.extensionButton.hide();
     }
 };
 
@@ -1238,7 +1240,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.pressColor = colors[0];
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
-    
+
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
@@ -1673,10 +1675,18 @@ IDE_Morph.prototype.createCategories = function () {
     }
     this.categories = new ScrollFrameMorph();
     this.categories.color = this.groupColor;
-    
+
+    this.extensionButton = new Morph();
+    this.extensionButton.color = new Color(133, 92, 214);
+    const symb = new SymbolMorph('extension', 34);
+    symb.setLeft(13)
+    symb.setTop(7)
+    this.extensionButton.add(symb)
+
+
     this.catWidth = 62;
     this.categories.acceptsDrops = false;
-        this.categories.contents.acceptsDrops = false;
+    this.categories.contents.acceptsDrops = false;
     // this.categories.bounds.setWidth(this.paletteWidth);
     this.categories.bounds.setWidth(this.catWidth);
     this.categories.bounds.setHeight(world.height())
@@ -1732,14 +1742,14 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     function addCategoryButton(category, color) {
-        console.log(color)
+        // console.log(category, "native")
         var labelWidth = 10,
             colors = [
                 // myself.frameColor.darker(IDE_Morph.prototype.isBright ? 5 : 50),
                 color || SpriteMorph.prototype.blockColor[category],
-                color?.darker?.() || SpriteMorph.prototype.blockColor[category].darker(),
+                color || SpriteMorph.prototype.blockColor[category].darker(),
                 // SpriteMorph.prototype.blockColor[category],
-                color?.darker?.() || SpriteMorph.prototype.blockColor[category].darker(),
+                color || SpriteMorph.prototype.blockColor[category].darker(),
             ],
             button;
         button = new ToggleButtonMorph(
@@ -1766,7 +1776,8 @@ IDE_Morph.prototype.createCategories = function () {
         if (IDE_Morph.prototype.isBright) {
             button.labelPressColor = BLACK;
         }
-        button.outlineColor = button.color.darker()
+        button.color = SpriteMorph.prototype.blockColor[category];
+        button.outlineColor = SpriteMorph.prototype.blockColor[category].darker(25);
         button.hint = category[0].toUpperCase().concat(category.slice(1));
         button.fixLayout();
         button.refresh();
@@ -1781,10 +1792,10 @@ IDE_Morph.prototype.createCategories = function () {
                 26
             )
         );
-        if(color) {
+        if (color) {
             button.userMenu = () => {
                 var menu = new MenuMorph(this);
-                menu.addItem("Remove Category",()=>(myself.deletePaletteCategory(category)))
+                menu.addItem("Remove Category", () => (myself.deletePaletteCategory(category)))
 
                 return menu
             }
@@ -1797,7 +1808,7 @@ IDE_Morph.prototype.createCategories = function () {
         // console.log(category, "custom")
         addCategoryButton(category, color);
         return 0;
-        
+
     }
 
     function fixCategoriesLayout() {
@@ -1850,7 +1861,7 @@ IDE_Morph.prototype.createCategories = function () {
         myself.categories.add(scroller);
         myself.categories.scroller = scroller;*/
         myself.categories.bounds.corner.y = myself.bottom();
-        
+
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
@@ -1871,6 +1882,7 @@ IDE_Morph.prototype.createCategories = function () {
 
     fixCategoriesLayout();
     this.add(this.categories);
+    this.add(this.extensionButton);
 };
 
 IDE_Morph.prototype.createPalette = function (forSearching) {
@@ -2135,34 +2147,34 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
         nameField.setContents(myself.currentSprite.name);
     };
     this.spriteBar.reactToEdit = nameField.accept;
-    if(!(this.currentSprite instanceof StageMorph)) {
-    var xLabel = new StringMorph("x:"),
-    yLabel = new StringMorph("y:"),
-    dirLabel = new StringMorph("dir:"),
-    sizeLabel = new StringMorph("size:");
-    xLabel.color = this.buttonLabelColor;
-    xLabel.setPosition(nameField.topRight().add(new Point(0, 0)));
-    xLabel.fps = 10;
-    xLabel.step = () => (xLabel.text = `x: ${Math.round(myself.currentSprite.xPosition())}`, xLabel.fixLayout(),this.spriteBar.rerender())
-    this.spriteBar.add(xLabel)
+    if (!(this.currentSprite instanceof StageMorph)) {
+        var xLabel = new StringMorph("x:"),
+            yLabel = new StringMorph("y:"),
+            dirLabel = new StringMorph("dir:"),
+            sizeLabel = new StringMorph("size:");
+        xLabel.color = this.buttonLabelColor;
+        xLabel.setPosition(nameField.topRight().add(new Point(0, 0)));
+        xLabel.fps = 10;
+        xLabel.step = () => (xLabel.text = `x: ${Math.round(myself.currentSprite.xPosition())}`, xLabel.fixLayout(), this.spriteBar.rerender())
+        this.spriteBar.add(xLabel)
 
-    yLabel.color = this.buttonLabelColor;
-    yLabel.setPosition(nameField.topRight().add(new Point(0, 10)));
-    yLabel.fps = 10;
-    yLabel.step = () => (yLabel.text = `y: ${Math.round(myself.currentSprite.yPosition())}`, yLabel.fixLayout(),this.spriteBar.rerender())
-    this.spriteBar.add(yLabel)
+        yLabel.color = this.buttonLabelColor;
+        yLabel.setPosition(nameField.topRight().add(new Point(0, 10)));
+        yLabel.fps = 10;
+        yLabel.step = () => (yLabel.text = `y: ${Math.round(myself.currentSprite.yPosition())}`, yLabel.fixLayout(), this.spriteBar.rerender())
+        this.spriteBar.add(yLabel)
 
-    sizeLabel.color = this.buttonLabelColor;
-    sizeLabel.setPosition(xLabel.topRight().add(new Point(40, 0)));
-    sizeLabel.fps = 10;
-    sizeLabel.step = () => (sizeLabel.text = `size: ${Math.round(myself.currentSprite.getScale())}`, sizeLabel.fixLayout(),this.spriteBar.rerender())
-    this.spriteBar.add(sizeLabel)
+        sizeLabel.color = this.buttonLabelColor;
+        sizeLabel.setPosition(xLabel.topRight().add(new Point(40, 0)));
+        sizeLabel.fps = 10;
+        sizeLabel.step = () => (sizeLabel.text = `size: ${Math.round(myself.currentSprite.getScale())}`, sizeLabel.fixLayout(), this.spriteBar.rerender())
+        this.spriteBar.add(sizeLabel)
 
-    dirLabel.color = this.buttonLabelColor;
-    dirLabel.setPosition(yLabel.topRight().add(new Point(40, 0)));
-    dirLabel.fps = 10;
-    dirLabel.step = () => (dirLabel.text = `dir: ${Math.round(myself.currentSprite.direction())}`, dirLabel.fixLayout(),this.spriteBar.rerender())
-    this.spriteBar.add(dirLabel)
+        dirLabel.color = this.buttonLabelColor;
+        dirLabel.setPosition(yLabel.topRight().add(new Point(40, 0)));
+        dirLabel.fps = 10;
+        dirLabel.step = () => (dirLabel.text = `dir: ${Math.round(myself.currentSprite.direction())}`, dirLabel.fixLayout(), this.spriteBar.rerender())
+        this.spriteBar.add(dirLabel)
     }
 
     // padlock
@@ -2710,7 +2722,24 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setTop(
             57//this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
         );
+        this.extensionButton.setTop(world.bottom() - 52)
+        this.extensionButton.setHeight(52)
+        globalThis["showExtensions"] = () => {
+            if (location.protocol === 'file:') {
+                this.importLocalFile();
+                return;
+            }
+            this.getURL(
+                this.resourceURL('libraries', 'LIBRARIES.json'),
+                txt => {
+                    var libraries = this.parseResourceFile(txt);
+                    new LibraryImportDialogMorph(this, libraries).popUp();
+                }
+            );
+        }
+        this.extensionButton.mouseDownLeft = showExtensions
         this.categories.setWidth(this.catWidth);
+        this.extensionButton.setWidth(this.catWidth);
         this.categories.bounds.corner.y = this.bottom()
         if (this.categories.scroller) {
             this.categories.scroller.setWidth(this.paletteWidth);
@@ -2727,7 +2756,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.palette.setHeight(this.bottom() - this.palette.top() - border);
     this.palette.setWidth(this.paletteWidth);
     this.paletteHandle.hide()
-    
+
     // this.currentTab == "scripts" ? this.paletteHandle.show() : this.palette.setPosition(new Point(-this.width(), 0))
 
     if (situation !== 'refreshPalette') {
@@ -3363,7 +3392,7 @@ IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
             }
             return 'variables';
         }
-        
+
         return top.category;
     }
     return null;
@@ -4284,7 +4313,7 @@ IDE_Morph.prototype.snapMenu = function () {
             + '\nand show user-friendly ones',
             new Color(0, 100, 0)
         );
-    } else if (world.currentKey === 16) { // shift-click
+    } else {
         menu.addLine();
         menu.addItem(
             'Switch to dev mode',
@@ -5312,19 +5341,7 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addItem(
         'Extensions...',
-        () => {
-            if (location.protocol === 'file:') {
-                this.importLocalFile();
-                return;
-            }
-            this.getURL(
-                this.resourceURL('libraries', 'LIBRARIES.json'),
-                txt => {
-                    var libraries = this.parseResourceFile(txt);
-                    new LibraryImportDialogMorph(this, libraries).popUp();
-                }
-            );
-        },
+        showExtensions,
         'Select categories of additional blocks to add to this project.'
     );
     menu.addItem(
@@ -5767,9 +5784,6 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\nalessandrito123: Right Click Color Picker'
         + '\ntethrarxitet: Personal Libraries mod'
-        + '\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks'
-        + '\njoecooldoo/joenulldoo: Auto-default Single Palette'
-        + '\ngamercreepernoob: Flat CSlots'
         + '\n\n'
         + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
         + '\nare watercolor paintings by Meghan Taylor and represent'
@@ -6002,7 +6016,7 @@ IDE_Morph.prototype.createNewCategory = function () {
     ).promptCategory(
         "New Category",
         null,
-        new Color (255, 102, 128),
+        new Color(255, 102, 128),
         this.world(),
         null, // pic
         'Blocks category name:' // msg

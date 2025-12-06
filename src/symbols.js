@@ -85,6 +85,7 @@ SymbolMorph.prototype.names = [
   "pause",
   "flag",
   "octagon",
+  "extension",
   "cloud",
   "cloudGradient",
   "cloudOutline",
@@ -317,6 +318,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
       break;
     case "octagon":
       this.renderSymbolOctagon(ctx, aColor);
+      break;
+    case "extension":
+      this.renderSymbolExtension(ctx, aColor);
       break;
     case "cloud":
       this.renderSymbolCloud(ctx, aColor);
@@ -577,6 +581,8 @@ SymbolMorph.prototype.flagSymbolRed = new Image();
 SymbolMorph.prototype.flagSymbolRed.src = "src/flag-red.svg";
 SymbolMorph.prototype.stopSymbol = new Image();
 SymbolMorph.prototype.stopSymbol.src = "src/stop.svg";
+SymbolMorph.prototype.extensionSymbol = new Image();
+SymbolMorph.prototype.extensionSymbol.src = "src/extensions.svg";
 SymbolMorph.prototype.notesImage = new Image();
 SymbolMorph.prototype.notesImage.src = "src/notes.svg";
 SymbolMorph.prototype.notesImageBlack = new Image();
@@ -624,6 +630,10 @@ SymbolMorph.prototype.horiz = new Image();
 SymbolMorph.prototype.horiz.src = "src/horiz.svg";
 SymbolMorph.prototype.horizBlack = new Image();
 SymbolMorph.prototype.horizBlack.src = "src/horiz-black.svg";
+SymbolMorph.prototype.vertical = new Image();
+SymbolMorph.prototype.vertical.src = "src/vertical.svg";
+SymbolMorph.prototype.verticalBlack = new Image();
+SymbolMorph.prototype.verticalBlack.src = "src/vertical-black.svg";
 
 SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
   // draw a vertically centered square
@@ -869,10 +879,7 @@ SymbolMorph.prototype.renderSymbolFullScreen = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolGrow = function (ctx, color) {
   if(this.isAnyUIColor(color)) {
-    var img = this[this.isUIColor(color) ? "growGrey" : color.eq(BLACK) ? "growBlack" : "grow"];
-    
-    this.drawImage(ctx, img)
-    return;
+    return this.drawImage(ctx, this[this.isUIColor(color) ? "growGrey" : color.eq(BLACK) ? "growBlack" : "grow"])
   }
   var h = this.size,
     width = this.symbolWidth(),
@@ -1081,6 +1088,7 @@ SymbolMorph.prototype.drawImage = function (ctx, image) {
     return;
   }
   // I have a feeling that this might be turning into spagetti code...
+  // Indeed it is
   var prW =
       document.getElementById("world").getAttribute("width") / document.getElementById("world").width,
       prH =
@@ -1128,6 +1136,14 @@ SymbolMorph.prototype.renderSymbolFlag = function (ctx, color) {
     );*/
   ctx.stroke();
 };
+
+SymbolMorph.prototype.renderSymbolExtension = function (ctx, color) {
+  var side = this.symbolWidth(),
+    vert = (side - side * 0.383) / 2;
+  this.drawImage(ctx, this.extensionSymbol);
+
+  return;
+}
 
 SymbolMorph.prototype.renderSymbolOctagon = function (ctx, color) {
   // draw an octagon
@@ -2366,10 +2382,7 @@ SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
   if(color.eq(WHITE) || color.eq(BLACK)) {
-    var canvas = newCanvas(new Point(this.width(), this.height()));
-    this.drawImage(canvas.getContext('2d'), color.eq(WHITE) ? this.horiz : this.horizBlack);
-    ctx.drawImage(canvas, 0, 0, this.width(), this.height());
-    return
+    return this.drawImage(ctx, color.eq(WHITE) ? this.horiz : this.horizBlack)
   }
   var w = this.symbolWidth(),
     h = this.size,
@@ -2398,7 +2411,7 @@ SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
   ctx.translate(0, this.size);
-  ctx.rotate(radians(-90));
+  ctx.rotate(radians(90));
   this.renderSymbolFlipHorizontal(ctx, color);
 };
 
