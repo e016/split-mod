@@ -84,8 +84,8 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
 HatBlockMorph*/
 
 /* very hidden owl edit hehe */
-
 /* Not so hidden, is it? - d016 */
+/* wow these sure are.. edits - codingisfun2831t, your local UI guy */
 
 /*jshint esversion: 8*/
 
@@ -1573,6 +1573,44 @@ IDE_Morph.prototype.createControlBar = function () {
   // button.hint = 'cloud operations';
   button.makeSquare();
   button.refresh();
+
+  // cloudButton
+  button = new TriggerMorph(
+    this,
+    "cloudMenu"
+  );
+  
+  buttonIcon = new SymbolMorph("cloudOutline", 11);
+  buttonLabel = new TextMorph("Cloud");
+  buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
+  buttonArrow.scale = 1;
+  button.setHeight(48);
+  button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
+  button.color = this.accentColor;
+  button.highlightColor = this.accentColor.darker(25);
+  button.pressColor = button.highlightColor;
+
+  button.refresh = function() {
+    buttonIcon.name = !isNil(myself.cloud.username) ? "cloud" : "cloudOutline"
+  };
+
+  buttonIcon.setColor(WHITE);
+  buttonIcon.fixLayout();
+  buttonIcon.setCenter(button.center());
+  buttonIcon.setLeft(button.left() + 10);
+  buttonLabel.setColor(WHITE);
+  buttonLabel.setCenter(button.center());
+  buttonLabel.setLeft(buttonIcon.right() + 5);
+  buttonLabel.isBold = true;
+  buttonArrow.setCenter(button.center());
+  buttonArrow.setLeft(buttonLabel.right() + 5);
+  
+  button.label.destroy();
+  button.add(buttonIcon);
+  button.add(buttonLabel);
+  button.add(buttonArrow);
+  button.iconMorph = buttonIcon;
+
   cloudButton = button;
   this.controlBar.add(cloudButton);
   this.controlBar.cloudButton = cloudButton; // for menu positioning & refresh
@@ -1609,11 +1647,11 @@ IDE_Morph.prototype.createControlBar = function () {
     });*/
 
     
-    projectButton.setCenter(myself.controlBar.center());
-    projectButton.setLeft(this.left());
+    settingsButton.setCenter(myself.controlBar.center());
+    settingsButton.setLeft(this.left());
 
     slider.setCenter(myself.controlBar.center());
-    slider.setLeft(projectButton.right() + 200 + padding);
+    slider.setRight(this.right() - padding);
     
 
     steppingButton.setCenter(myself.controlBar.center());
@@ -1631,11 +1669,11 @@ IDE_Morph.prototype.createControlBar = function () {
 
     if (myself.cloud.disabled) {
       cloudButton.hide();
-      settingsButton.setRight(projectButton.left() - padding);
+      settingsButton.setLeft(projectButton.right() + padding);
     } else {
+      settingsButton.setLeft(projectButton.right() + padding);
       cloudButton.setCenter(myself.controlBar.center());
-      cloudButton.setRight(projectButton.left() - padding);
-      settingsButton.setRight(cloudButton.left() - padding);
+      cloudButton.setLeft(settingsButton.right() + padding);
     }
 
     this.refreshSlider();
@@ -1704,7 +1742,10 @@ IDE_Morph.prototype.createControlBar = function () {
       )
     );
     this.label.setCenter(this.center());
-    this.label.setLeft(this.projectButton.right() + padding);
+    if (myself.cloud.disabled)
+      this.label.setLeft(this.settingsButton.right() + padding);
+    else
+      this.label.setLeft(this.cloudButton.right() + padding);
     this.add(this.label);
   };
 };
@@ -2849,7 +2890,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
   if (situation !== "refreshPalette") {
     // controlBar
-    this.controlBar.setPosition(this.logo.topRight().add(new Point(100, 0)));
+    this.controlBar.setPosition(this.logo.topRight());
     this.controlBar.setWidth(this.right() - this.controlBar.left() - border);
     this.controlBar.fixLayout();
     this.controlBarBackground.setWidth(this.width());
@@ -4603,6 +4644,7 @@ IDE_Morph.prototype.cloudMenu = function () {
 
 IDE_Morph.prototype.settingsMenu = function () {
   var menu,
+    advancedMenu,
     stage = this.stage,
     world = this.world(),
     pos = this.controlBar.settingsButton.bottomLeft(),
@@ -4620,7 +4662,7 @@ IDE_Morph.prototype.settingsMenu = function () {
 
   function addPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
-      menu.addItem(
+      advancedMenu.addItem(
         [test ? on : off, localize(label)],
         toggle,
         test ? onHint : offHint,
@@ -4631,7 +4673,7 @@ IDE_Morph.prototype.settingsMenu = function () {
 
   function addSubPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
-      menu.addItem(
+      advancedMenu.addItem(
         [test ? on : off, "  " + localize(label)],
         toggle,
         test ? onHint : offHint,
@@ -4641,7 +4683,9 @@ IDE_Morph.prototype.settingsMenu = function () {
   }
 
   menu = new MenuMorph(this);
+  advancedMenu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
+  advancedMenu.bgColor = this.accentColor;
   menu.ideRender();
   menu.addMenu(
     [
@@ -4650,10 +4694,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     ],
     this.getLanguageMenu()
   );
+  menu.addLine();
   menu.addMenu(localize("Looks") + "...", this.looksMenuData());
   menu.addItem("Zoom blocks...", "userSetBlocksScale");
   menu.addItem("Fade blocks...", "userFadeBlocks");
   menu.addItem("Afterglow blocks...", "userSetBlocksAfterglow");
+  menu.addLine();
   menu.addItem("Stage size...", "userSetStageSize");
   if (shiftClicked) {
     menu.addItem(
@@ -4665,21 +4711,20 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
   }
   menu.addItem("Microphone resolution...", "microphoneMenu");
-  menu.addLine();
   if (shiftClicked) {
-    menu.addItem(
+    advancedMenu.addItem(
       "Primitives palette",
       () => this.stage.restorePrimitives(),
       "EXPERIMENTAL - switch (back) to\n" + "primitive blocks in the palette",
       new Color(100, 0, 0)
     );
-    menu.addItem(
+    advancedMenu.addItem(
       "Customize primitives",
       () => this.stage.customizeBlocks(),
       "EXPERIMENTAL - overload primitives\n" + "with custom block definitions",
       new Color(100, 0, 0)
     );
-    menu.addLine();
+    advancedMenu.addLine();
     addPreference(
       "Blocks all the way",
       () => {
@@ -4696,7 +4741,7 @@ IDE_Morph.prototype.settingsMenu = function () {
       new Color(100, 0, 0)
     );
     if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
-      menu.addItem(
+      advancedMenu.addItem(
         "Use custom blocks",
         () =>
           SpriteMorph.prototype.toggleAllCustomizedPrimitives(
@@ -4706,16 +4751,18 @@ IDE_Morph.prototype.settingsMenu = function () {
         "EXPERIMENTAL - use custom blocks\n" + "in all palette blocks",
         new Color(100, 0, 0)
       );
-      menu.addItem(
+      advancedMenu.addItem(
         "Use primitives",
         () =>
           SpriteMorph.prototype.toggleAllCustomizedPrimitives(this.stage, true),
         "EXPERIMENTAL - use primitives\n" + "in all palette blocks",
         new Color(100, 0, 0)
       );
-      menu.addLine();
+      advancedMenu.addLine();
     }
   }
+
+  // add advancedMenu preferences
   addPreference(
     "JavaScript extensions",
     () => {
@@ -4870,13 +4917,13 @@ IDE_Morph.prototype.settingsMenu = function () {
       "scripting area"
   );
   if (this.performerMode) {
-    menu.addItem(
+    advancedMenu.addItem(
       "Performer mode scale...",
       "userSetPerformerModeScale",
       "specify the scale of the stage\npixels in performer mode"
     );
   }
-  menu.addLine(); // everything visible below is persistent
+  advancedMenu.addLine(); // everything visible below is persistent
   addPreference(
     "Blurred shadows",
     "toggleBlurredShadows",
@@ -5079,7 +5126,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     "EXPERIMENTAL! check to enable\nsupport for compiling",
     true
   );
-  menu.addLine(); // everything below this line is stored in the project
+  advancedMenu.addLine(); // everything below this line is stored in the project
   addPreference(
     "Thread safe scripts",
     () => (stage.isThreadSafe = !stage.isThreadSafe),
@@ -5221,6 +5268,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     "disable dragging media\nand blocks out of\nwatchers and balloons",
     false
   );
+  
+  menu.addMenu("Advanced...", advancedMenu);
   menu.popup(world, pos);
 };
 
