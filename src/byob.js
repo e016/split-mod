@@ -1922,7 +1922,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                             "bootstrap",
                             () => this.definition.bootstrap(rcvr),
                             'replace this corresponding primitive',
-                            new Color(100, 0, 0)
+                            MENU_RED
                         );
                     }
                 }
