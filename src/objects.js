@@ -15468,7 +15468,7 @@ WatcherMorph.prototype.userMenu = function () {
                         this.getter // variable name
                     ),
                     null,
-                    new Color(100, 0, 0)
+                    MENU_RED
                 );
             }
             if (this.currentValue instanceof List &&
@@ -15481,7 +15481,7 @@ WatcherMorph.prototype.userMenu = function () {
                         this.getter // variable name
                     ),
                     null,
-                    new Color(100, 0, 0)
+                    MENU_RED
                 );
             }
         }
@@ -15491,7 +15491,7 @@ WatcherMorph.prototype.userMenu = function () {
                     'parse',
                     'parseTxt',
                     'try to convert\nraw data into a list',
-                    new Color(100, 0, 0)
+                    MENU_RED
                 );
             }
             menu.addItem(
