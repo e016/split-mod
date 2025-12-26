@@ -4272,7 +4272,7 @@ IDE_Morph.prototype.snapMenu = function () {
             'switchToDevMode',
             'enable Morphic\ncontext menus\nand inspectors,'
                 + '\nnot user-friendly!',
-            new Color(100, 0, 0)
+            MENU_RED
         );
     }
     menu.popup(world, this.logo.bottomLeft());
@@ -4295,7 +4295,7 @@ IDE_Morph.prototype.cloudMenu = function () {
             'url...',
             'setCloudURL',
             null,
-            new Color(100, 0, 0)
+            MENU_RED
         );
         menu.addLine();
     }
@@ -4359,7 +4359,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 }
             },
             null,
-            this.hasChangedMedia ? new Color(100, 0, 0) : new Color(0, 100, 0)
+            this.hasChangedMedia ? MENU_RED : new Color(0, 100, 0)
         );
         menu.addItem(
             'export project without media...',
@@ -4377,7 +4377,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 }
             },
             null,
-            new Color(100, 0, 0)
+            MENU_RED
         );
         menu.addItem(
             'export project as cloud data...',
@@ -4395,7 +4395,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 }
             },
             null,
-            new Color(100, 0, 0)
+            MENU_RED
         );
         menu.addLine();
         menu.addItem(
@@ -4448,7 +4448,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 );
             },
             null,
-            new Color(100, 0, 0)
+            MENU_RED
         );
     }
     menu.popup(world, pos);
@@ -4478,7 +4478,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 ],
                 toggle,
                 test ? onHint : offHint,
-                hide ? new Color(100, 0, 0) : null
+                hide ? MENU_RED : null
             );
         }
     }
@@ -4492,7 +4492,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 ],
                 toggle,
                 test ? onHint : offHint,
-                hide ? new Color(100, 0, 0) : null
+                hide ? MENU_RED : null
             );
         }
     }
@@ -4534,7 +4534,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             'userSetDragThreshold',
             'specify the distance the hand has to move\n' +
                 'before it picks up an object',
-            new Color(100, 0, 0)
+            MENU_RED
         );
     }
     menu.addItem(
@@ -4548,14 +4548,14 @@ IDE_Morph.prototype.settingsMenu = function () {
             () => this.stage.restorePrimitives(),
             'EXPERIMENTAL - switch (back) to\n' +
                 'primitive blocks in the palette',
-            new Color(100, 0, 0)
+            MENU_RED
         );
         menu.addItem(
             'Customize primitives',
             () => this.stage.customizeBlocks(),
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
-            new Color(100, 0, 0)
+            MENU_RED
         );
         menu.addLine();
         addPreference(
@@ -4573,7 +4573,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             'uncheck to disable editing primitives\n' +
                 'in the palette as custom blocks',
             'check to edit primitives\nin the palette as custom blocks',
-            new Color(100, 0, 0)
+            MENU_RED
 
         );
         if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
@@ -4585,7 +4585,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 ),
                 'EXPERIMENTAL - use custom blocks\n' +
                     'in all palette blocks',
-                new Color(100, 0, 0)
+                MENU_RED
             );
             menu.addItem(
                 'Use primitives',
@@ -4595,7 +4595,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 ),
                 'EXPERIMENTAL - use primitives\n' +
                     'in all palette blocks',
-                new Color(100, 0, 0)
+                MENU_RED
             );
             menu.addLine();
         }
@@ -5126,14 +5126,14 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Restore unsaved project',
                 'restore',
                 backup,
-                shiftClicked ? new Color(100, 0, 0) : null
+                shiftClicked ? MENU_RED : null
             );
             if (shiftClicked) {
                 menu.addItem(
                     'Clear backup',
                     'clearBackup',
                     backup,
-                    new Color(100, 0, 0)
+                    MENU_RED
                 );
             }
         }
@@ -5174,13 +5174,13 @@ IDE_Morph.prototype.projectMenu = function () {
                     '\nwith a summary of this project' +
                     '\nwith drop-shadows on all pictures.' +
                     '\nnot supported by all browsers',
-                new Color(100, 0, 0)
+                MENU_RED
             );
             menu.addItem(
                 'Export all scripts as pic...',
                 () => this.exportScriptsPicture(),
                 'show a picture of all scripts\nand block definitions',
-                new Color(100, 0, 0)
+                MENU_RED
             );
         }
         if (this.stage.trailsLog.length) {
@@ -5248,7 +5248,7 @@ IDE_Morph.prototype.projectMenu = function () {
                     'Export customized primitives...',
                     () => this.exportCustomizedPrimitives(),
                     'EXPERIMENTAL!',
-                    new Color(100, 0, 0)
+                    MENU_RED
                 );
             }
             menu.addItem(
@@ -7999,7 +7999,7 @@ IDE_Morph.prototype.looksMenuData = function () {
                 ],
                 toggle,
                 test ? onHint : offHint,
-                hide ? new Color(100, 0, 0) : null
+                hide ? MENU_RED : null
             );
         }
     };
@@ -11339,7 +11339,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                 "parent...",
                 'chooseExemplar',
                 null,
-                new Color(100, 0, 0)
+                MENU_RED
             );
         }
         */
@@ -11719,7 +11719,7 @@ CostumeIconMorph.prototype.userMenu = function () {
             'edit rotation point only...',
             'editRotationPointOnly',
             null,
-            new Color(100, 0, 0)
+            MENU_RED
         );
     }
     menu.addItem("rename", "renameCostume");
