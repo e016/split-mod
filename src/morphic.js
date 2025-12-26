@@ -1359,11 +1359,13 @@ const ZERO = new Point();
 const BLACK = new Color();
 const WHITE = new Color(255, 255, 255);
 const CLEAR = new Color(0, 0, 0, 0);
+cosnt MENU_RED = new Color(255,50,50);
 
 Object.freeze(ZERO);
 Object.freeze(BLACK);
 Object.freeze(WHITE);
 Object.freeze(CLEAR);
+Object.freeze(MENU_RED);
 
 var standardSettings = {
   minimumFontHeight: getMinimumFontHeight(), // browser settings
