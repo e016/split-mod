@@ -9214,7 +9214,7 @@ ScriptsMorph.prototype.userMenu = function () {
             this.recordDrop();
           },
           "forget recorded block drops\non this pane",
-          new Color(100, 0, 0)
+          MENU_RED
         );
       }
       menu.addLine();
