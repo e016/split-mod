@@ -3413,7 +3413,7 @@ InputFieldMorph.prototype.init = function (
   isReadOnly
 ) {
   var contents = new StringFieldMorph(
-      text || "",
+      String(text) || "",
       null,
       null,
       null,
@@ -3635,7 +3635,7 @@ InputFieldMorph.prototype.render = function (ctx) {
 
   if (this.parent) {
     if (this.parent.color.eq(WHITE)) {
-      this.color = this.parent.color.darker(this.contrast * 0.1);
+      //this.color = this.parent.color.darker(this.contrast * 0.1);
     } else {
       this.color = this.parent.color.lighter(this.contrast * 0.75);
     }
