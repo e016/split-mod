@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.7.0";
+var SplitVersion = "1.7.2";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -113,6 +113,7 @@ var StageHandleMorph;
 var PaletteHandleMorph;
 var CamSnapshotDialogMorph;
 var SoundRecorderDialogMorph;
+var CorralStageMorph;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -2144,7 +2145,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   var rotationStyleButtons = [],
     thumbSize = new Point(45, 45),
     nameField,
-    padlock,
+    label,
     thumbnail,
     trashbutton,
     tabCorner = 10, //15,
@@ -2186,6 +2187,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     ctx.fill();
     ctx.stroke();
   };
+  this.spriteBar.setHeight(100);
   this.add(this.spriteBar);
   this.oldSpriteBar = new Morph();
   this.oldSpriteBar.color = this.frameColor;
@@ -2301,11 +2303,14 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   };
 
   nameField = new InputFieldMorph(this.currentSprite.name);
-  nameField.setWidth(100); // fixed dimensions
-  nameField.contrast = 90;
+  nameField.setWidth(128); // fixed dimensions
+  nameField.contrast = 0;
   nameField.fontSize = 10;
-  nameField.setPosition(myself.spriteBar.position().add(new Point(4, 4)));
-  nameField.typeInPadding = 6;
+  nameField.setPosition(
+    myself.spriteBar.position().add(new Point(0, 12))
+  );
+  nameField.doConstrastingColor = false;
+  nameField.typeInPadding = 8;
   this.spriteBar.add(nameField);
   this.spriteBar.nameField = nameField;
   nameField.fixLayout();
@@ -2318,87 +2323,13 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     nameField.setContents(myself.currentSprite.name);
   };
   this.spriteBar.reactToEdit = nameField.accept;
-  if (!(this.currentSprite instanceof StageMorph)) {
-    var xLabel = new StringMorph("x:"),
-      yLabel = new StringMorph("y:"),
-      dirLabel = new StringMorph("dir:"),
-      sizeLabel = new StringMorph("size:");
-    xLabel.color = this.buttonLabelColor;
-    xLabel.setPosition(nameField.topRight().add(new Point(0, 0)));
-    xLabel.fps = 10;
-    xLabel.step = () => (
-      (xLabel.text = `x: ${Math.round(myself.currentSprite.xPosition())}`),
-      xLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(xLabel);
 
-    yLabel.color = this.buttonLabelColor;
-    yLabel.setPosition(nameField.topRight().add(new Point(0, 10)));
-    yLabel.fps = 10;
-    yLabel.step = () => (
-      (yLabel.text = `y: ${Math.round(myself.currentSprite.yPosition())}`),
-      yLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(yLabel);
-
-    sizeLabel.color = this.buttonLabelColor;
-    sizeLabel.setPosition(xLabel.topRight().add(new Point(40, 0)));
-    sizeLabel.fps = 10;
-    sizeLabel.step = () => (
-      (sizeLabel.text = `size: ${Math.round(myself.currentSprite.getScale())}`),
-      sizeLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(sizeLabel);
-
-    dirLabel.color = this.buttonLabelColor;
-    dirLabel.setPosition(yLabel.topRight().add(new Point(40, 0)));
-    dirLabel.fps = 10;
-    dirLabel.step = () => (
-      (dirLabel.text = `dir: ${Math.round(myself.currentSprite.direction())}`),
-      dirLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(dirLabel);
-  }
-
-  // padlock
-  padlock = new ToggleMorph(
-    "checkbox",
-    null,
-    () => {
-      this.currentSprite.isDraggable = !this.currentSprite.isDraggable;
-      this.currentSprite.recordUserEdit(
-        "sprite",
-        "draggable",
-        this.currentSprite.isDraggable
-      );
-    },
-    localize("draggable"),
-    () => this.currentSprite.isDraggable
-  );
-  padlock.label.isBold = false;
-  padlock.label.setColor(this.buttonLabelColor);
-  padlock.color = tabColors[2];
-  padlock.highlightColor = tabColors[0];
-  padlock.pressColor = tabColors[1];
-
-  padlock.tick.shadowOffset = MorphicPreferences.isFlat
-    ? ZERO
-    : new Point(-1, -1);
-  padlock.tick.shadowColor = BLACK;
-  padlock.tick.color = this.buttonLabelColor;
-  padlock.tick.isBold = false;
-  padlock.tick.fixLayout();
-
-  padlock.setPosition(nameField.bottomLeft().add(2));
-  padlock.fixLayout();
-  this.spriteBar.add(padlock);
-  if (this.currentSprite instanceof StageMorph) {
-    padlock.hide();
-  }
+  label = new StringMorph("Sprite", 10, null, true);
+  label.setColor(new Color(87, 94, 117));
+  label.setCenter(nameField.center());
+  label.setLeft(myself.spriteBar.left() + 12);
+  nameField.setLeft(label.right() + 4);
+  this.spriteBar.add(label);
 
   // tab bar
   tabBar.tabTo = function (tabString) {
@@ -2501,19 +2432,10 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.spriteBar.fixLayout = function () {
     this.setTop(myself.stage.bottom() + padding);
     this.setLeft(myself.stage.left());
-    nameField.bounds.corner.x = Math.min(
-      nameField.left() + 100,
-      world.right() - 5
-    );
+    this.setWidth(myself.stage.width() - 72);
 
-    nameField.fixLayout();
-    nameField.bounds.corner.x = Math.min(
-      nameField.left() + 100,
-      world.right() - 5
-    );
-
-    trashbutton.setTop(this.top() + padding);
-    trashbutton.setRight(this.right() - padding);
+  trashbutton.setTop(this.top() + padding)
+  trashbutton.setRight(this.right() - padding);
   };
 };
 
@@ -2631,15 +2553,12 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   };
   this.add(this.corral);
 
-  this.corral.stageIcon = new SpriteIconMorph(this.stage);
-  this.corral.stageIcon.isDraggable = false;
-  this.corral.stageIcon.setPosition(
-    new Point(
-      this.corral.right() - this.corral.stageIcon.width(),
-      this.corral.stageIcon.bounds.origin.y
-    )
-  );
-  this.corral.add(this.corral.stageIcon);
+  // stage
+  this.corral.stage = new CorralStageMorph(this.stage, this);
+  this.corral.stage.color = this.groupColor;
+  this.corral.stage.borderColor = this.borderColor;
+  this.corral.stage.border = 1;
+  this.corral.add(this.corral.stage);
 
   frame = new ScrollFrameMorph(null, null, this.sliderColor);
   frame.acceptsDrops = false;
@@ -2669,36 +2588,39 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   this.corral.add(this.corral.album);
 
   this.corral.fixLayout = function () {
-    this.stageIcon.setCenter(this.center());
-    this.stageIcon.setLeft(this.left() + padding);
-    this.stageIcon.children[0].setRight(this.right() - padding);
-
     // scenes
     if (myself.scenes.length() < 2) {
       this.album.hide();
+      this.frame.setLeft(this.left() + padding);
+      this.frame.setExtent(
+        new Point(this.right() - this.frame.left() - 72, this.height())
+      );
     } else {
-      this.stageIcon.setTop(this.top());
       this.album.show();
-      this.album.setLeft(this.right() - (this.stageIcon.width() + padding * 2));
-      this.album.setTop(this.stageIcon.bottom() + padding);
-      this.album.setWidth(this.stageIcon.width() + padding * 2);
-      this.album.setHeight(this.height() - this.stageIcon.height() - padding);
+      this.album.setLeft(this.left() + padding);
+      this.album.setTop(this.top() + padding);
+      this.album.setWidth(50);
+      this.album.setHeight(this.height()  - padding);
+      this.frame.setLeft(this.album.right() + padding);
+      this.frame.setExtent(
+        new Point(this.right() - this.album.right() - 72, this.height())
+      );
     }
 
-    this.frame.setLeft(this.stageIcon.right() + padding);
-    this.frame.setExtent(
-      new Point(this.right() - this.frame.left(), this.height())
-    );
     this.arrangeIcons();
+
+    this.stage.setPosition(myself.spriteBar.topRight().add(new Point(padding, 0)));
+    this.stage.setExtent(new Point(72, this.height() + myself.spriteBar.height()));
 
     this.newSpriteButton.bounds.setExtent(new Point(52, 52));
     this.newSpriteButton.label.setCenter(this.newSpriteButton.center());
-    this.newSpriteButton.setBottom(this.bottom() - padding);
-    this.newSpriteButton.setRight(this.right() - padding);
+    this.newSpriteButton.setBottom(this.frame.bottom() - padding);
+    this.newSpriteButton.setRight(this.frame.right() - padding);
 
     this.newSpriteFlyout.setCenter(this.newSpriteButton.center());
     this.newSpriteFlyout.setBottom(this.newSpriteButton.center().y);
     this.newSpriteFlyout.fixLayout();
+
 
     this.refresh();
   };
@@ -2729,7 +2651,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   };
 
   this.corral.refresh = function () {
-    this.stageIcon.refresh();
+    this.stage.refresh();
     this.frame.contents.children.forEach((icon) => icon.refresh());
   };
 
@@ -3111,7 +3033,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.spriteBar.setLeft(this.stage.left());
     this.spriteBar.setTop(this.stage.bottom() + padding);
     this.spriteBar.setWidth(this.stage.width());
-    this.spriteBar.setHeight(Math.round(this.logo.height() * 1.2));
     this.spriteBar.fixLayout();
 
     // corral
@@ -3202,7 +3123,7 @@ IDE_Morph.prototype.setExtent = function (point) {
         ext.x - (200 + this.oldSpriteBar.tabBar.width() + this.padding * 2);
       minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
       maxHeight = ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5;
-      minRatio = minWidth / this.stage.dimensions.x;
+      minRatio = 1;
       maxRatio = Math.min(
         maxWidth / this.stage.dimensions.x,
         maxHeight / this.stage.dimensions.y
@@ -7582,8 +7503,8 @@ IDE_Morph.prototype.switchToDevMode = function () {
   this.controlBar.updateLabel();
   this.isAutoFill = false;
   this.isDraggable = true;
-  this.setExtent(world.extent().subtract(100));
-  this.setPosition(world.position().add(20));
+  // this.setExtent(world.extent().subtract(100));
+  // this.setPosition(world.position().add(20));
   this.flushBlocksCache();
   this.refreshPalette();
   this.categories.refreshEmpty();
@@ -7828,7 +7749,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     if (this.wasSingleStepping && !Process.prototype.enableSingleStepping) {
       this.toggleSingleStepping();
     }
-    this.setColor(this.backgroundColor);
+    this.setColor(this.frameColor);
     this.controlBar.setColor(this.accentColor);
     elements.forEach((e) => e.show());
     this.stage.setScale(1);
@@ -13976,4 +13897,208 @@ SoundRecorderDialogMorph.prototype.destroy = function () {
     this.mediaRecorder.stream.getTracks()[0].stop();
   }
   SoundRecorderDialogMorph.uber.destroy.call(this);
+};
+
+
+// CorralStageMorph
+
+// The IDE_Morph corral contains a instance of me.
+
+// CorralStageMorph inherits from BoxMorph:
+
+CorralStageMorph.prototype = new BoxMorph();
+CorralStageMorph.prototype.constructor = CorralStageMorph;
+CorralStageMorph.uber = BoxMorph.prototype;
+
+CorralStageMorph.prototype.thumbSize = new Point(60, 45);
+
+// CorralStageMorph instance creation
+
+function CorralStageMorph(stage, ide) {
+  this.init(stage, ide);
+}
+
+CorralStageMorph.prototype.init = function(stage, ide) {
+  CorralStageMorph.uber.init.call(this);
+
+  this.stage = stage;
+  this.ide = ide
+  this.corner = 10;
+  this.hoverCursor = "pointer";
+
+  this.header = null;
+  this.label = null;
+  this.thumbnail = null;
+  this.backdrops = null;
+
+  this.buildContents();
+
+  // monkey-patch the stage's costumes list
+  var myself = this;
+  this.stage.costumes._changed = this.stage.costumes.changed;
+  this.stage.costumes.changed = function () {
+    this._changed();
+
+    myself.updateBackdrops();
+  }
+}
+
+CorralStageMorph.prototype.buildContents = function() {
+  var myself = this;
+
+  this.header = new Morph();
+  this.header.render = function(ctx) {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), [myself.corner, myself.corner, 0, 0]);
+    
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = myself.borderColor;
+    ctx.lineWidth = 2;
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+
+    ctx.moveTo(0, myself.corner / 2);
+    ctx.lineTo(0, this.height())
+
+    ctx.moveTo(this.width(), myself.corner / 2);
+    ctx.lineTo(this.width(), this.height())
+
+    ctx.moveTo(myself.corner / 2, 0);
+    ctx.lineTo(this.width() - myself.corner / 2, 0)
+    ctx.stroke();
+
+  }
+  this.header.color = WHITE;
+  this.add(this.header);
+
+  this.label = new TextMorph("Stage", 10);
+  this.label.color = BLACK;
+  this.add(this.label);
+
+  this.backdrops = new TextMorph("...", 10, null, null, null, "center");
+  this.backdrops.color = BLACK;
+  this.add(this.backdrops);
+
+  this.createThumbnail();
+  this.updateBackdrops();
+}
+
+CorralStageMorph.prototype.fixLayout = function() {
+  this.header.setPosition(this.topLeft());
+  this.header.setExtent(new Point(this.width(), 40));
+
+  this.label.setCenter(this.header.center());
+
+  this.thumbnail.setCenter(this.center());
+  this.thumbnail.setTop(this.header.bottom() + 5);
+
+  this.backdrops.setCenter(this.center());
+  this.backdrops.setTop(this.thumbnail.bottom() + 10);
+}
+
+CorralStageMorph.prototype.refresh = function() {
+  if (this.ide.currentSprite == this.stage) {
+    this.header.setColor(this.ide.accentColor);
+    this.label.setColor(WHITE);
+  } else {
+    this.header.setColor(WHITE);
+    this.label.setColor(BLACK);
+  }
+}
+
+CorralStageMorph.prototype.mouseClickLeft = function() {
+  this.ide.selectSprite(this.stage);
+}
+
+CorralStageMorph.prototype.createThumbnail = function () {
+  if (this.thumbnail) {
+    this.thumbnail.destroy();
+  }
+
+  this.thumbnail = new Morph();
+  this.thumbnail.isCachingImage = true;
+  this.thumbnail.bounds.setExtent(this.thumbSize);
+  this.thumbnail.cachedImage = this.stage.thumbnail(
+    this.thumbSize,
+    this.thumbnail.cachedImage
+  );
+  this.add(this.thumbnail);
+
+  this.fixLayout();
+};
+
+CorralStageMorph.prototype.updateBackdrops = function () {
+  this.backdrops.text = "Backdrops\n\n" + (this.stage.costumes.length() + 1); // count the always existant "empty" as one
+  this.backdrops.rerender();
+  this.backdrops.fixLayout();
+  this.fixLayout();
+}
+
+// CorralStageMorph drag & drop
+
+CorralStageMorph.prototype.wantsDropOf = function (morph) {
+  // allow scripts & media to be copied from one sprite to another
+  // by drag & drop
+  return (
+    morph instanceof BlockMorph ||
+    morph instanceof CommentMorph ||
+    morph instanceof CostumeIconMorph ||
+    morph instanceof SoundIconMorph
+  );
+};
+
+CorralStageMorph.prototype.reactToDropOf = function (morph, hand) {
+  if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
+    if (!(morph instanceof HatBlockMorph && morph.isCustomBlockSpecific())) {
+      this.copyStack(morph);
+    }
+  } else if (morph instanceof CostumeIconMorph) {
+    this.copyCostume(morph.object);
+  } else if (morph instanceof SoundIconMorph) {
+    this.copySound(morph.object);
+  }
+  this.world().add(morph);
+  morph.slideBackTo(hand.grabOrigin);
+};
+
+CorralStageMorph.prototype.copyStack = function (block) {
+  var stage = this.stage,
+    dup = block.fullCopy(),
+    y = Math.max(
+      stage.scripts.children
+        .map((stack) => stack.fullBounds().bottom())
+        .concat([stage.scripts.top()])
+    );
+
+  dup.setPosition(new Point(stage.scripts.left() + 20, y + 20));
+  stage.scripts.add(dup);
+  if (dup instanceof BlockMorph) {
+    dup.allComments().forEach((comment) => comment.align(dup));
+  }
+  stage.scripts.adjustBounds();
+
+  // delete all local custom blocks (methods) that the receiver
+  // doesn't understand
+  dup.allChildren().forEach((morph) => {
+    if (
+      morph.isCustomBlock &&
+      !morph.isGlobal &&
+      !sprite.getMethod(morph.blockSpec)
+    ) {
+      morph.deleteBlock();
+    }
+  });
+};
+
+CorralStageMorph.prototype.copyCostume = function (costume) {
+  var dup = costume.copy();
+  dup.name = this.stage.newCostumeName(dup.name);
+  this.stage.addCostume(dup);
+  this.stage.wearCostume(dup);
+};
+
+CorralStageMorph.prototype.copySound = function (sound) {
+  var dup = sound.copy();
+  this.stage.addSound(dup.audio, dup.name);
 };
