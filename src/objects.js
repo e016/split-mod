@@ -12046,6 +12046,11 @@ StageMorph.prototype.blockTemplates = function (
     blocks.push(block("reportNewList"));
     blocks.push(block("reportNumbers"));
     blocks.push("-");
+    blocks.push(block("doAddToList"));
+    blocks.push(block("doDeleteFromList"));
+    blocks.push(block("doInsertInList"));
+    blocks.push(block("doReplaceInList"));
+    blocks.push("-");
     blocks.push(block("reportCONS"));
     blocks.push(block("reportListItem"));
     blocks.push(block("reportCDR"));
@@ -12061,11 +12066,6 @@ StageMorph.prototype.blockTemplates = function (
     blocks.push(block("reportCombine"));
     blocks.push("-");
     blocks.push(block("doForEach"));
-    blocks.push("-");
-    blocks.push(block("doAddToList"));
-    blocks.push(block("doDeleteFromList"));
-    blocks.push(block("doInsertInList"));
-    blocks.push(block("doReplaceInList"));
     blocks.push("-");
     blocks.push(block("reportConcatenatedLists"));
     blocks.push(block("reportReshape"));
