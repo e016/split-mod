@@ -1903,6 +1903,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     thumbnail,
     trashbutton,
     tabCorner = 10, //15,
+    tabRenderCorner = 15,
     tabPadding = 10, //3,
     tabColors = this.tabColors,
     tabBar = new AlignmentMorph("row", -tabCorner * 0.5),
@@ -2113,6 +2114,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   );
   tab.padding = tabPadding;
   tab.corner = tabCorner;
+  tab.renderCorner = tabRenderCorner;
   tab.edge = 1;
   tab.labelShadowOffset = new Point(-1, -1);
   tab.labelShadowColor = tabColors[1];
@@ -2149,6 +2151,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   );
   tab.padding = tabPadding;
   tab.corner = tabCorner;
+  tab.renderCorner = tabRenderCorner;
   tab.edge = 1;
   tab.labelShadowOffset = new Point(-1, -1);
   tab.labelShadowColor = tabColors[1];
@@ -2166,6 +2169,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   );
   tab.padding = tabPadding;
   tab.corner = tabCorner;
+  tab.renderCorner = tabRenderCorner;
   tab.edge = 1;
   tab.labelShadowOffset = new Point(-1, -1);
   tab.labelShadowColor = tabColors[1];

@@ -1614,8 +1614,8 @@ SymbolMorph.prototype.renderSymbolLine = function (ctx, color) {
   ctx.lineWidth = l * 2;
   ctx.lineCap = "round";
   ctx.beginPath();
-  ctx.moveTo(l, l);
-  ctx.lineTo(w - l, h - l);
+  ctx.moveTo(l, h - l);
+  ctx.lineTo(w - l, l);
   ctx.stroke();
 };
 
