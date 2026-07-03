@@ -2152,7 +2152,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     [
       new SymbolMorph("brush", 12),
       localize(
-        this.currentSprite instanceof SpriteMorph ? "Costumes" : "Backgrounds",
+        this.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
       ),
     ],
     () => this.currentTab === "costumes", // query
@@ -2376,14 +2376,8 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
       new Point(72, this.height() + myself.spriteBar.height()),
     );
 
-    this.newSpriteButton.bounds.setExtent(new Point(52, 52));
-    this.newSpriteButton.label.setCenter(this.newSpriteButton.center());
-    this.newSpriteButton.setBottom(this.frame.bottom() - padding);
-    this.newSpriteButton.setRight(this.frame.right() - padding);
-
-    this.newSpriteFlyout.setCenter(this.newSpriteButton.center());
-    this.newSpriteFlyout.setBottom(this.newSpriteButton.center().y);
-    this.newSpriteFlyout.fixLayout();
+    this.newSpriteFlyout.setBottom(this.frame.bottom() - padding);
+    this.newSpriteFlyout.setRight(this.frame.right() - padding);
 
     this.refresh();
   };
@@ -2435,154 +2429,12 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   };
 
   // newSpriteFlyout
-  this.corral.newSpriteFlyout = new Morph();
-  this.corral.newSpriteFlyout.setExtent(new Point(36, 134));
-  this.corral.newSpriteFlyout.color = this.accentColor;
-  this.corral.newSpriteFlyout.hide();
-
-  this.corral.newSpriteFlyout.render = function (ctx) {
-    ctx.beginPath();
-    ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
-    ctx.fillStyle = this.color.toString();
-    ctx.fill();
-  };
-
-  this.corral.newSpriteFlyout.mouseLeave = function () {
-    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteButton)
-      return;
-
-    this.hide();
-  };
-
-  this.corral.newSpriteFlyout.fixLayout = function () {
-    this.turtle.setBottom(this.bottom() - 26);
-    this.turtle.setLeft(this.left());
-    this.turtle.label.setCenter(this.turtle.center());
-
-    this.camButton.setBottom(this.turtle.top());
-    this.camButton.setLeft(this.left());
-    this.camButton.label.setCenter(this.camButton.center());
-
-    this.paintbutton.setBottom(this.camButton.top());
-    this.paintbutton.setLeft(this.left());
-    this.paintbutton.label.setCenter(this.paintbutton.center());
-  };
+  this.corral.newSpriteFlyout = new ScratchFlyoutMorph(this, "addNewSprite", "newSprite", this.accentColor);
+  this.corral.newSpriteFlyout.addItem(() => { this.addNewSprite(true); }, "turtle");
+  this.corral.newSpriteFlyout.addItem("newCamSprite", "camera");
+  this.corral.newSpriteFlyout.addItem("paintNewSprite", "brush");
+  this.corral.newSpriteFlyout.build();
   this.corral.add(this.corral.newSpriteFlyout);
-
-  // newSpriteFlyout - turtle
-  this.corral.newSpriteFlyout.turtle = new TriggerMorph(this, () => {
-    this.addNewSprite(true);
-    this.corral.newSpriteFlyout.hide();
-  });
-  this.corral.newSpriteFlyout.turtle.label.destroy();
-  this.corral.newSpriteFlyout.turtle.label = new SymbolMorph(
-    "turtle",
-    20,
-    WHITE,
-  );
-  this.corral.newSpriteFlyout.turtle.add(
-    this.corral.newSpriteFlyout.turtle.label,
-  );
-  this.corral.newSpriteFlyout.turtle.color = this.accentColor;
-  this.corral.newSpriteFlyout.turtle.highlightColor = new Color(15, 189, 140);
-  this.corral.newSpriteFlyout.turtle.setExtent(new Point(36, 36));
-  this.corral.newSpriteFlyout.turtle._render =
-    this.corral.newSpriteFlyout.turtle.render;
-  this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.turtle);
-
-  // newSpriteFlyout - camButton
-  this.corral.newSpriteFlyout.camButton = new TriggerMorph(this, () => {
-    this.newCamSprite();
-    this.corral.newSpriteFlyout.hide();
-  });
-  this.corral.newSpriteFlyout.camButton.label.destroy();
-  this.corral.newSpriteFlyout.camButton.label = new SymbolMorph(
-    "camera",
-    20,
-    WHITE,
-  );
-  this.corral.newSpriteFlyout.camButton.add(
-    this.corral.newSpriteFlyout.camButton.label,
-  );
-  this.corral.newSpriteFlyout.camButton.color = this.accentColor;
-  this.corral.newSpriteFlyout.camButton.highlightColor = new Color(
-    15,
-    189,
-    140,
-  );
-  this.corral.newSpriteFlyout.camButton.setExtent(new Point(36, 36));
-  this.corral.newSpriteFlyout.camButton._render =
-    this.corral.newSpriteFlyout.camButton.render;
-  this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.camButton);
-
-  // newSpriteFlyout - paintbutton
-  this.corral.newSpriteFlyout.paintbutton = new TriggerMorph(this, () => {
-    this.paintNewSprite();
-    this.corral.newSpriteFlyout.hide();
-  });
-  this.corral.newSpriteFlyout.paintbutton.label.destroy();
-  this.corral.newSpriteFlyout.paintbutton.label = new SymbolMorph(
-    "brush",
-    20,
-    WHITE,
-  );
-  this.corral.newSpriteFlyout.paintbutton.add(
-    this.corral.newSpriteFlyout.paintbutton.label,
-  );
-  this.corral.newSpriteFlyout.paintbutton.color = this.accentColor;
-  this.corral.newSpriteFlyout.paintbutton.highlightColor = new Color(
-    15,
-    189,
-    140,
-  );
-  this.corral.newSpriteFlyout.paintbutton.setExtent(new Point(36, 36));
-  this.corral.newSpriteFlyout.paintbutton._render =
-    this.corral.newSpriteFlyout.paintbutton.render;
-  this.corral.newSpriteFlyout.paintbutton.render = function (ctx) {
-    ctx.beginPath();
-    ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
-    ctx.closePath();
-    ctx.clip();
-
-    this._render(ctx);
-    ctx.restore();
-  };
-  this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.paintbutton);
-
-  // newSpriteButton
-  this.corral.newSpriteButton = new PushButtonMorph(
-    this,
-    "addNewSprite",
-    new SymbolMorph("newSprite", 28),
-  );
-  this.corral.newSpriteButton.color = this.accentColor;
-  this.corral.newSpriteButton.corner = 26;
-  this.corral.newSpriteButton.highlightColor = new Color(15, 189, 140);
-  this.corral.newSpriteButton.outlineColor = this.accentColor.withAlpha(0.25);
-  this.corral.newSpriteButton.outline = 4;
-
-  this.corral.newSpriteButton._mouseEnter =
-    this.corral.newSpriteButton.mouseEnter;
-  this.corral.newSpriteButton.mouseEnter = function () {
-    this._mouseEnter();
-
-    myself.corral.newSpriteFlyout.show();
-  };
-  this.corral.newSpriteButton._mouseLeave =
-    this.corral.newSpriteButton.mouseLeave;
-  this.corral.newSpriteButton.mouseLeave = function () {
-    this._mouseLeave();
-
-    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteFlyout)
-      return;
-    if (
-      this.world().hand.morphAtPointer().parent == myself.corral.newSpriteFlyout
-    )
-      return;
-    myself.corral.newSpriteFlyout.hide();
-  };
-
-  this.corral.add(this.corral.newSpriteButton);
 };
 
 // IDE_Morph layout
@@ -2614,7 +2466,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     );
     this.extensionButton.setTop(world.bottom() - 52);
     this.extensionButton.setHeight(52);
-    globalThis["showExtensions"] = () => {
+    this.extensionButton.mouseDownLeft = () => {
       if (location.protocol === "file:") {
         this.importLocalFile();
         return;
@@ -2624,7 +2476,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         new LibraryImportDialogMorph(this, libraries).popUp();
       });
     };
-    this.extensionButton.mouseDownLeft = showExtensions;
     this.categories.setWidth(this.catWidth);
     this.extensionButton.setWidth(this.catWidth);
     this.categories.bounds.corner.y =
@@ -3331,19 +3182,21 @@ IDE_Morph.prototype.stopAllScripts = function () {
   this.projectControlBar.stopButton.refresh();
 };
 
-IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
-  // prevent switching to another sprite if a block editor or a block
-  // visibility dialog box is open
-  // so local blocks of different sprites don't mix
-  if (
-    detect(
+IDE_Morph.prototype.cantSwitchSprites = function () {
+  return detect(
       this.world().children,
       (morph) =>
         morph instanceof BlockEditorMorph ||
         morph instanceof BlockDialogMorph ||
         morph instanceof BlockVisibilityDialogMorph,
-    )
-  ) {
+    );
+}
+
+IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
+  // prevent switching to another sprite if a block editor or a block
+  // visibility dialog box is open
+  // so local blocks of different sprites don't mix
+  if (this.cantSwitchSprites()) {
     return;
   }
   if (this.currentSprite && this.currentSprite.scripts.focus) {
@@ -3766,6 +3619,11 @@ IDE_Morph.prototype.addNewSprite = function (useTurtle) {
 };
 
 IDE_Morph.prototype.paintNewSprite = function () {
+  if (this.cantSwitchSprites()) {
+    this.showMessage("can't create new sprite if a block editor is open.");
+    return;
+  }
+
   var sprite = new SpriteMorph(this.globalVariables),
     cos = new Costume();
 
@@ -3775,16 +3633,8 @@ IDE_Morph.prototype.paintNewSprite = function () {
   this.sprites.add(sprite);
   this.corral.addSprite(sprite);
   this.selectSprite(sprite);
-  cos.edit(
-    this.world(),
-    this,
-    true,
-    () => this.removeSprite(sprite),
-    () => {
-      sprite.addCostume(cos);
-      sprite.wearCostume(cos);
-    },
-  );
+  this.oldSpriteBar.tabBar.tabTo("costumes");
+  this.spriteEditor.paintNew();
 };
 
 IDE_Morph.prototype.newCamSprite = function () {
@@ -4952,7 +4802,7 @@ IDE_Morph.prototype.projectMenu = function () {
     world = this.world(),
     pos = this.controlBar.projectButton.bottomLeft(),
     graphicsName =
-      this.currentSprite instanceof SpriteMorph ? "Costumes" : "Backgrounds",
+      this.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
     shiftClicked = world.currentKey === 16,
     backup = this.availableBackup(shiftClicked);
 
@@ -12110,7 +11960,7 @@ WardrobeMorph.prototype.updateList = function () {
         return;
       }
       ide.importMedia(
-        ide.currentSprite instanceof SpriteMorph ? "Costumes" : "Backgrounds",
+        ide.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
       );
     },
     new SymbolMorph("cross", 15),
@@ -12315,9 +12165,45 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 };
 
 WardrobeMorph.prototype.paintNew = function () {
+  // I had to change the null extentPoint in the Costume newCanvas to instead
+  // use the stage dimensions for StageMorph. I believe this is of the in-tab
+  // costume editor d016 made.
+  //
+  // Back in the original Snap! source code, this would have somethng like this
+  // at the bottom:
+
+  //     cos.edit(
+  //         this.world(),
+  //         ide,
+  //         true,
+  //         null,
+  //         () => {
+  //             this.sprite.shadowAttribute('costumes');
+  //             this.sprite.addCostume(cos);
+  //             this.updateList();
+  //             this.sprite.wearCostume(cos);
+  //             this.sprite.recordUserEdit(
+  //                 'costume',
+  //                 'draw',
+  //                 cos.name
+  //             );
+  //         }
+  //     );
+  //
+  // The null canvas size was okay for this because the costume wouldn't get
+  // added to the sprite/stage right away, and the paint editor handled a empty
+  // canvas. However, when d016 modified the costume editor to be inside the tab
+  // itself (to be more like Scratch, of course), he had to add the costume to
+  // the object, again to be more like Scratch. Thus, the object then recived
+  // this undrawable empty canvas and, error. d016 only did a catch for the
+  // SpriteMorph's render, not the StageMorph's. Thus I made the costume the stage
+  // size if we are for the stage.
+  //
+  // - codingisfun2831t
+  
   var ide = this.parentThatIsA(IDE_Morph),
     cos = new Costume(
-      newCanvas(null, true),
+      newCanvas(this.sprite instanceof StageMorph ? this.sprite.dimensions : null, true),
       this.sprite.newCostumeName(localize("costume")),
       null, // rotation center
       null, // don't shrink-to-fit
@@ -12328,8 +12214,8 @@ WardrobeMorph.prototype.paintNew = function () {
 
   this.sprite.shadowAttribute("costumes");
   this.sprite.addCostume(cos);
-  this.sprite.wearCostume(cos);
   this.updateList();
+  this.sprite.wearCostume(cos);
   this.sprite.recordUserEdit("costume", "draw", cos.name);
 };
 
@@ -13746,6 +13632,7 @@ CorralStageMorph.prototype.init = function (stage, ide) {
   this.label = null;
   this.thumbnail = null;
   this.backdrops = null;
+  this.newBackdropFlyout = null;
 
   this.buildContents();
 
@@ -13799,8 +13686,28 @@ CorralStageMorph.prototype.buildContents = function () {
   this.backdrops.color = this.ide.buttonLabelColor;
   this.add(this.backdrops);
 
+  this.newBackdropFlyout = new ScratchFlyoutMorph(this, "addNewBackdrop", "newBackdrop", this.ide.accentColor);
+  this.newBackdropFlyout.addItem("paintNewBackdrop", "brush");
+  this.newBackdropFlyout.build();
+  this.add(this.newBackdropFlyout);
+
   this.createThumbnail();
   this.updateBackdrops();
+};
+
+CorralStageMorph.prototype.addNewBackdrop = function() {
+  this.ide.importMedia("Backdrops");
+};
+
+CorralStageMorph.prototype.paintNewBackdrop = function () {
+  if (this.ide.cantSwitchSprites() && this.ide.currentSprite != this.state) {
+    this.ide.showMessage("can't create new backdrop if a block editor is open and not on the stage.");
+    return;
+  }
+
+  this.ide.selectSprite(this.stage);
+  this.ide.oldSpriteBar.tabBar.tabTo("costumes");
+  this.ide.spriteEditor.paintNew();
 };
 
 CorralStageMorph.prototype.fixLayout = function () {
@@ -13814,6 +13721,9 @@ CorralStageMorph.prototype.fixLayout = function () {
 
   this.backdrops.setCenter(this.center());
   this.backdrops.setTop(this.thumbnail.bottom() + 10);
+
+  this.newBackdropFlyout.setCenter(this.center());
+  this.newBackdropFlyout.setBottom(this.bottom() - 5);
 };
 
 CorralStageMorph.prototype.refresh = function () {
@@ -13941,3 +13851,129 @@ CorralStageMorph.prototype.copySound = function (sound) {
   var dup = sound.copy();
   this.stage.addSound(dup.audio, dup.name);
 };
+
+
+
+// ScratchFlyoutMorph
+
+// I provide a easy interface for the sprite/stage flyout in the IDE_Morph's corral.
+
+// ScratchFlyoutMorph inherits from Morph:
+
+ScratchFlyoutMorph.prototype = new Morph();
+ScratchFlyoutMorph.prototype.constructor = ScratchFlyoutMorph;
+ScratchFlyoutMorph.uber = Morph.prototype;
+
+// ScratchFlyoutMorph instance creation
+
+function ScratchFlyoutMorph(target, action, icon, accent) {
+  this.init(target, action, icon, accent);
+}
+
+ScratchFlyoutMorph.prototype.init = function (target, action, icon, accent) {
+  ScratchFlyoutMorph.uber.init.call(this);
+  
+  this.target = target;
+  this.action = action;
+  this.icon = icon;
+  this.accent = accent;
+  this.items = [];
+
+  this.color = CLEAR;
+}
+
+// ScratchFlyoutMorph item management:
+
+ScratchFlyoutMorph.prototype.addItem = function (action, icon) {
+  this.items.push([action, icon]);
+}
+
+// ScratchFlyoutMorph building:
+
+ScratchFlyoutMorph.prototype.build = function() {
+  let myself = this;
+
+  this.bounds.setExtent(new Point(52, 52 + 36 * this.items.length));
+  let y = this.bottom() - 52;
+
+  if (this.items.length > 0) {
+    let padding = new Morph();
+    padding.color = this.accent;
+    padding.setExtent(new Point(36, 36));
+    padding.setCenter(this.center());
+    padding.setBottom(this.bottom()-26);
+    padding.hide();
+    this.add(padding);
+  }
+
+  for (let item of this.items) {
+    let button = new TriggerMorph(this.target, item[0]);
+    button.label.destroy();
+    button.label = new SymbolMorph(
+      item[1],
+      20,
+      WHITE,
+    );
+    button.add(
+      button.label,
+    );
+    button.color = this.accent;
+    button.highlightColor = new Color(15, 189, 140);
+    button.setExtent(new Point(36, 36));
+    button.setCenter(this.center());
+    button.setBottom(y);
+    button.mouseClickLeft = () => {
+      TriggerMorph.prototype.mouseClickLeft.call(button);
+
+      this.mouseLeave();
+    }
+
+    if (item == this.items[this.items.length-1]) {
+      button._render = button.render;
+      button.render = function (ctx) {
+        ctx.beginPath();
+        ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
+        ctx.closePath();
+        ctx.clip();
+
+        this._render(ctx);
+        ctx.restore();
+      };
+    }
+
+    y -= 36;
+    button.hide();
+    this.add(button);
+  }
+
+  this.button = new PushButtonMorph(
+    this.target,
+    this.action,
+    new SymbolMorph(this.icon, 28),
+  );
+  this.button.color = this.accent;
+  this.button.corner = 26;
+  this.button.highlightColor = new Color(15, 189, 140);
+  this.button.outlineColor = this.accent.withAlpha(0.25);
+  this.button.outline = 4;
+  this.button.padding = 6;
+  this.button.fixLayout();
+  this.button.setCenter(this.center());
+  this.button.setBottom(this.bottom());
+  this.button.mouseEnter = () => {
+    PushButtonMorph.prototype.mouseEnter.call(this.button);
+
+    this.showFlyout();
+  }
+  this.add(this.button);
+}
+
+// ScratchFlyoutMorph flyout:
+
+ScratchFlyoutMorph.prototype.mouseLeave = function() {
+  this.children.filter(c => !(c instanceof PushButtonMorph)).forEach(c => c.hide());
+}
+
+ScratchFlyoutMorph.prototype.showFlyout = function() {
+  this.children.filter(c => !(c instanceof PushButtonMorph)).forEach(c => c.show());
+}

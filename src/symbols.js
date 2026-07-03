@@ -157,6 +157,7 @@ SymbolMorph.prototype.names = [
   "speakers",
   "extension",
   "newSprite",
+  "newBackdrop",
   "commentClose",
   "penIcon",
   "blockSeperator",
@@ -547,6 +548,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case "newSprite":
       this.renderSymbolNewSprite(ctx);
       break;
+    case "newBackdrop":
+      this.renderSymbolNewBackdrop(ctx);
+      break;
     case "penIcon":
       this.renderSymbolPenIcon(ctx);
       break;
@@ -621,6 +625,8 @@ SymbolMorph.prototype.symbolWidth = function () {
 
 SymbolMorph.prototype.addSpriteSymbol = new Image();
 SymbolMorph.prototype.addSpriteSymbol.src = "src/add-sprite.svg";
+SymbolMorph.prototype.addBackdropSymbol = new Image();
+SymbolMorph.prototype.addBackdropSymbol.src = "src/add-backdrop.svg";
 SymbolMorph.prototype.flagSymbol = new Image();
 SymbolMorph.prototype.flagSymbol.src = "src/flag.svg";
 SymbolMorph.prototype.flagSymbolRed = new Image();
@@ -2776,6 +2782,10 @@ SymbolMorph.prototype.renderSymbolExtension = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolNewSprite = function (ctx) {
   this.drawImage(ctx, this.addSpriteSymbol);
+};
+
+SymbolMorph.prototype.renderSymbolNewBackdrop = function (ctx) {
+  this.drawImage(ctx, this.addBackdropSymbol);
 };
 
 SymbolMorph.prototype.renderSymbolPenIcon = function (ctx) {

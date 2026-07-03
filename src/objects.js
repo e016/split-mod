@@ -12846,7 +12846,7 @@ StageMorph.prototype.positionTalkBubble = function () {
     return null;
   }
   bubble.show();
-  bubble.keepWithin(this);
+  bubble.setPosition(this.position().add(bubble.border))
 };
 
 StageMorph.prototype.doThink = StageMorph.prototype.bubble;
