@@ -2281,7 +2281,8 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     rightCorrection = 0,
     rightMost,
     hasLoopCSlot = false,
-    hasLoopArrow = false;
+    hasLoopArrow = false,
+    anyNotRound = parts.some((part) => "alwaysRound" in part && !part.alwaysRound);
 
   if (this instanceof MultiArgMorph && this.slotSpec !== "%cs") {
     blockWidth += this.arrows().width() / 2;
@@ -2383,6 +2384,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         this.rounding *
           (line[0] instanceof BlockLabelMorph ||
           line[0].constructor.name == "BlockLabelFragmentPlaceHolderMorph" ||
+          line[0].constructor.name == "BlockLabelPlaceHolderMorph" ||
           line[0] instanceof BooleanSlotMorph ||
           (line[0] instanceof MultiArgMorph && line[0].slotSpec.includes("%b"))
             ? 1.1
@@ -2392,7 +2394,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     } else if (
       isReporter &&
       (line[0] instanceof BlockLabelMorph ||
-        line[0].constructor.name == "BlockLabelFragmentPlaceHolderMorph")
+        line[0].constructor.name == "BlockLabelFragmentPlaceHolderMorph" || line[0].constructor.name == "BlockLabelPlaceHolderMorph")
     ) {
       x =
         this.left() +
@@ -2420,6 +2422,8 @@ SyntaxElementMorph.prototype.fixLayout = function () {
           part instanceof ReporterBlockMorph ||
           (!(part instanceof BlockLabelMorph) &&
             !(part.constructor.name == "BlockLabelFragmentPlaceHolderMorph") &&
+            !(part.constructor.name === "BlockLabelPlaceHolderMorph") && 
+            !(part.constructor.name === "BlockLabelFragmentMorph") && 
             !(part instanceof CSlotMorph) &&
             !(part instanceof ArrowMorph) &&
             !(part instanceof MultiArgMorph && part.slotSpec.includes("%cs")) &&
@@ -2639,7 +2643,11 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   }
 
   // set my extent (silently, because we'll redraw later anyway):
-  this.alwaysRound = lines.length == 1;
+  if (anyNotRound) {
+    this.alwaysRound = false
+  } else {
+    this.alwaysRound = lines.length == 1
+  };
   if (lines.length > 0) {
     if (this.isPredicate && lines.length > 0 && !(lines[Math.floor(lines.length / 2)].at(-1) instanceof ArgMorph)) {
       blockWidth += this.rounding / 4;
@@ -2661,8 +2669,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     ) {
       this.containsCSlot = true;
       if (this.isPredicate) {
-        adjustMultiWidth = blockHeight / 2;
-        part.bounds.corner.x = blockWidth;
+        part.setRight(this.right());
+        part.setLeft(this.left() + this.rounding);
+        part.bounds.corner.x = part.parent.right();
       } else {
         part.setRight(this.right());
         part.setLeft(this.left() + this.labelPadding);
@@ -8292,7 +8301,9 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
   var w = this.width(),
     h = this.height(),
     h2 = Math.floor(h / 2),
-    r = h / 2,
+    r = (this.alwaysRound)
+        ? Math.min(h / 2, w / 2)
+        : Math.min(Math.round(1.5 * this.rounding), h / 2),
     corner = this.corner,
     right = w - r,
     pos = this.position(),
@@ -13586,10 +13597,10 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 };
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
-  if (this.isWide()) {
+  /*if (this.isWide()) {
     this.progress = -1;
     return;
-  }
+  }*/
   if (this.nextValue() === null) {
     this.progress = -1; // 'fade'
   } else {
@@ -13839,7 +13850,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.stroke();
   }
 
-  if (progress < 0 || !this.isEmptySlot() || progress == 1) {
+  if ((progress < 0 || !this.isEmptySlot() || progress == 1) && !this.isWide()) {
     if (this.value) {
       drawTick();
     } else {
@@ -13931,16 +13942,15 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     return;
   }
 
-  if (false) {
-    //this.isWide()) {
+  if (this.isWide()) {
     // draw the full text label
-    text = this.textLabelExtent();
+    let text,
+    x,
+    y;
+
+    text = this.textLabelExtentSpecific();
     y = this.height() - (this.height() - text.y) / 2;
-    if (this.value) {
-      x = this.width() / 2 - this.width() / 5;
-    } else {
-      x = this.width() - this.height() / 2 - text.x;
-    }
+    x = this.width() / 2;
     ctx.save();
     if (!MorphicPreferences.isFlat && useBlurredShadows) {
       ctx.shadowOffsetX = -shift;
@@ -13949,7 +13959,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
       ctx.shadowColor = this.value ? "rgb(0, 100, 0)" : "rgb(100, 0, 0)";
     }
     ctx.font = new StringMorph(null, this.fontSize, null, true).font();
-    ctx.textAlign = "left";
+    ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
     ctx.fillStyle = "rgb(255, 255, 255";
     ctx.fillText(localize(this.value ? "true" : "false"), x, y);
@@ -14091,6 +14101,23 @@ BooleanSlotMorph.prototype.textLabelExtent = function () {
     true, // bold
   );
   return new Point(Math.max(t.width(), f.width()), t.height());
+};
+
+BooleanSlotMorph.prototype.textLabelExtentSpecific = function () {
+  var t, f;
+  t = new StringMorph(
+    localize("true"),
+    this.fontSize,
+    null,
+    true, // bold
+  );
+  f = new StringMorph(
+    localize("false"),
+    this.fontSize,
+    null,
+    true, // bold
+  );
+  return this.value ? new Point(t.width(), t.height()) : new Point(f.width(), f.height());
 };
 
 // ArrowMorph //////////////////////////////////////////////////////////
