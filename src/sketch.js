@@ -1004,8 +1004,13 @@ VectorPaintEditorMorph.prototype.convertToBitmap = function () {
     this.shapes.forEach(function (each) {
       canvas.getContext("2d").drawImage(each.image, 0, 0);
     });
-  this.object = new Costume(canvas, this.object?.name);
-  this.object.contents.src = null;
+  this.object.costume = new Costume(
+      canvas,
+      this.object.costume?.name,
+      null, // rotation center
+      null, // don't shrink-to-fit
+      this.ide.stage.dimensions, // max extent
+    );
   this.parent.createEditor(true);
 };
 

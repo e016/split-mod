@@ -102,7 +102,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.6.0";
+var SplitVersion = "2.6.1";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3766,7 +3766,13 @@ IDE_Morph.prototype.addNewSprite = function (useTurtle) {
 
 IDE_Morph.prototype.paintNewSprite = function () {
   var sprite = new SpriteMorph(this.globalVariables),
-    cos = new Costume();
+    cos = new Costume(
+      newCanvas(this.stage.dimensions, true),
+      sprite.newCostumeName(localize("costume")),
+      null, // rotation center
+      null, // don't shrink-to-fit
+      this.stage.dimensions, // max extent
+    );
 
   sprite.name = this.newSpriteName(sprite.name);
   sprite.setCenter(this.stage.center());
@@ -3774,16 +3780,9 @@ IDE_Morph.prototype.paintNewSprite = function () {
   this.sprites.add(sprite);
   this.corral.addSprite(sprite);
   this.selectSprite(sprite);
-  cos.edit(
-    this.world(),
-    this,
-    true,
-    () => this.removeSprite(sprite),
-    () => {
-      sprite.addCostume(cos);
-      sprite.wearCostume(cos);
-    },
-  );
+  sprite.addCostume(cos);
+  sprite.wearCostume(cos);
+  this.oldSpriteBar.tabBar.tabTo("costumes")
 };
 
 IDE_Morph.prototype.newCamSprite = function () {
@@ -12246,7 +12245,7 @@ WardrobeMorph.prototype.createEditor = function (isNew) {
         : nop,
       ide,
       isNew ? [] : costume.shapes || [],
-      this.sprite.costume,
+      this.sprite,
     );
     this.fixLayout();
   }
@@ -12316,7 +12315,7 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 WardrobeMorph.prototype.paintNew = function () {
   var ide = this.parentThatIsA(IDE_Morph),
     cos = new Costume(
-      newCanvas(null, true),
+      newCanvas(ide.stage.dimensions, true),
       this.sprite.newCostumeName(localize("costume")),
       null, // rotation center
       null, // don't shrink-to-fit
@@ -12329,6 +12328,7 @@ WardrobeMorph.prototype.paintNew = function () {
   this.sprite.addCostume(cos);
   this.sprite.wearCostume(cos);
   this.updateList();
+  this.updateSelection();
   this.sprite.recordUserEdit("costume", "draw", cos.name);
 };
 
