@@ -102,7 +102,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.7.1";
+var SplitVersion = "2.7.2";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3322,7 +3322,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
     accentColor = this.getSetting("accentColor"),
     solidshadow = this.getSetting("solidshadow");
 
-  this.accentColor =
+  IDE_Morph.prototype.accentColor =
     this.accentColors[accentColor] ?? this.accentColors.blue;
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
   PushButtonMorph.prototype.pressColor = this.accentColor;
@@ -7811,7 +7811,7 @@ IDE_Morph.prototype.accentColorMenu = function () {
     };
   menu.bgColor = this.getControlBarColor();
   const setAccent = (name, color) => {
-    myself.accentColor = color;
+    IDE_Morph.prototype.accentColor = color;
     myself.saveSetting("accentColor", name);
     
     DialogBoxMorph.prototype.titleBarColor = myself.accentColor;
@@ -11958,89 +11958,7 @@ WardrobeMorph.prototype.updateList = function () {
   this.icon = icon;
   y = icon.bottom() + padding;
 
-  newbutton = new PushButtonMorph(
-    this,
-    () => {
-      const ide = this.parentThatIsA(IDE_Morph);
-      if (location.protocol === "file:") {
-        this.importLocalFile();
-        return;
-      }
-      ide.importMedia(
-        ide.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
-      );
-    },
-    new SymbolMorph("cross", 15),
-  );
-  newbutton.padding = 0;
-  newbutton.corner = 4;
-  newbutton.color = IDE_Morph.prototype.groupColor;
-  newbutton.labelMinExtent = new Point(36, 18);
-  newbutton.labelShadowOffset = new Point(-1, -1);
-  newbutton.labelShadowColor = newbutton.highlightColor;
-  newbutton.labelColor = TurtleIconMorph.prototype.labelColor;
-  newbutton.contrast = this.buttonContrast;
-  newbutton.hint = "get a costume";
-  newbutton.setPosition(new Point(x, y));
-  newbutton.fixLayout();
-  newbutton.setCenter(icon.center());
-  newbutton.setLeft(icon.right() + padding * 4);
-
-  this.addContents(newbutton);
-
-  paintbutton = new PushButtonMorph(
-    this,
-    "paintNew",
-    new SymbolMorph("brush", 15),
-  );
-  paintbutton.padding = 0;
-  paintbutton.corner = 4;
-  paintbutton.color = IDE_Morph.prototype.groupColor;
-  paintbutton.labelMinExtent = new Point(36, 18);
-  paintbutton.labelShadowOffset = new Point(-1, -1);
-  paintbutton.labelShadowColor = paintbutton.highlightColor;
-  paintbutton.labelColor = TurtleIconMorph.prototype.labelColor;
-  paintbutton.contrast = this.buttonContrast;
-  paintbutton.hint = "Paint a new costume";
-  paintbutton.setPosition(new Point(x, y));
-  paintbutton.fixLayout();
-  paintbutton.setCenter(icon.center());
-  paintbutton.setLeft(newbutton.right() + toolsPadding);
-
-  this.addContents(paintbutton);
-
-  if (CamSnapshotDialogMorph.prototype.enableCamera) {
-    cambutton = new PushButtonMorph(
-      this,
-      "newFromCam",
-      new SymbolMorph("camera", 15),
-    );
-    cambutton.padding = 0;
-    cambutton.corner = 4;
-    cambutton.color = IDE_Morph.prototype.groupColor;
-    cambutton.labelMinExtent = new Point(36, 18);
-    cambutton.labelShadowOffset = new Point(-1, -1);
-    cambutton.labelShadowColor = paintbutton.highlightColor;
-    cambutton.labelColor = TurtleIconMorph.prototype.labelColor;
-    cambutton.contrast = this.buttonContrast;
-    cambutton.hint = "Import a new costume from your webcam";
-    cambutton.setPosition(new Point(x, y));
-    cambutton.fixLayout();
-    cambutton.setCenter(paintbutton.center());
-    cambutton.setLeft(paintbutton.right() + toolsPadding);
-
-    this.addContents(cambutton);
-
-    if (!CamSnapshotDialogMorph.prototype.enabled) {
-      cambutton.disable();
-      cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
-    }
-
-    document.addEventListener("cameraDisabled", () => {
-      cambutton.disable();
-      cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
-    });
-  }
+  
   y = icon.bottom() + padding;
 
   this.sprite.costumes.asArray().forEach((costume) => {
@@ -12051,12 +11969,36 @@ WardrobeMorph.prototype.updateList = function () {
   });
   this.costumesVersion = this.sprite.costumes.lastChanged;
 
+  // newCostumeFlyout
+  if (this.newCostumeFlyout) {
+    this.newCostumeFlyout.destroy();
+  }
+  let openNewCostume = () => {
+      const ide = this.parentThatIsA(IDE_Morph);
+      if (location.protocol === "file:") {
+        this.importLocalFile();
+        return;
+      }
+      ide.importMedia(
+        ide.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
+      );
+    };
+  this.newCostumeFlyout = new ScratchFlyoutMorph(this, openNewCostume, "cross", IDE_Morph.prototype.accentColor);
+  this.newCostumeFlyout.addItem(openNewCostume, "magnifierOutline");
+  this.newCostumeFlyout.addItem("paintNew", "brush");
+  this.newCostumeFlyout.addItem("newFromCam", "camera");
+  this.newCostumeFlyout.build();
+  this.add(this.newCostumeFlyout);
+  
   this.contents.setPosition(oldPos);
   this.adjustScrollBars();
   this.changed();
-
+  
   this.updateSelection();
   this.editor || this.createEditor();
+
+  this.newCostumeFlyout.setLeft(this.left() + 10);
+  this.newCostumeFlyout.setBottom(this.bottom() - 5);
 };
 
 WardrobeMorph.prototype.createEditor = function (isNew) {
@@ -12131,6 +12073,8 @@ WardrobeMorph.prototype.switchToVector = function () {
 
 WardrobeMorph.prototype.fixLayout = function () {
   WardrobeMorph.uber.fixLayout.call(this);
+  this.newCostumeFlyout.setLeft(this.left() + 10);
+  this.newCostumeFlyout.setBottom(this.bottom() - 5);
   if (this.editor && this.editor?.scrollPaper) {
     this.editor.setLeft(this.icon.right() + 5);
     this.editor.setTop(this.icon.bottom() + 5);
@@ -12172,41 +12116,10 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 };
 
 WardrobeMorph.prototype.paintNew = function () {
-  // I had to change the null extentPoint in the Costume newCanvas to instead
-  // use the stage dimensions for StageMorph. I believe this is of the in-tab
-  // costume editor d016 made.
-  //
-  // Back in the original Snap! source code, this would have somethng like this
-  // at the bottom:
-
-  //     cos.edit(
-  //         this.world(),
-  //         ide,
-  //         true,
-  //         null,
-  //         () => {
-  //             this.sprite.shadowAttribute('costumes');
-  //             this.sprite.addCostume(cos);
-  //             this.updateList();
-  //             this.sprite.wearCostume(cos);
-  //             this.sprite.recordUserEdit(
-  //                 'costume',
-  //                 'draw',
-  //                 cos.name
-  //             );
-  //         }
-  //     );
-  //
-  // The null canvas size was okay for this because the costume wouldn't get
-  // added to the sprite/stage right away, and the paint editor handled a empty
-  // canvas. However, when d016 modified the costume editor to be inside the tab
-  // itself (to be more like Scratch, of course), he had to add the costume to
-  // the object, again to be more like Scratch. Thus, the object then recived
-  // this undrawable empty canvas and, error. d016 only did a catch for the
-  // SpriteMorph's render, not the StageMorph's. Thus I made the costume the stage
-  // size if we are for the stage.
-  //
-  // - codingisfun2831t
+  // I deleted your comment, codingisfun2831t 
+  // because when I was fixing some costume editor bugs, I saw this and fixed it
+  // but since I hadn't synced changes, I didn't see your comment. Now that we both fixed it,
+  // I have safely removed the original message.
   
   var ide = this.parentThatIsA(IDE_Morph),
     cos = new Costume(
@@ -12523,12 +12436,21 @@ JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
 JukeboxMorph.prototype.updateList = function () {
   var x = this.left() + 5,
     y = this.top() + 5,
+    myself = this,
     padding = 4,
     icon,
     txt,
     ide = this.sprite.parentThatIsA(IDE_Morph),
     newButton,
     recordButton;
+
+  function getSoundFromLibrary() {
+    if (location.protocol === "file:") {
+        myself.importLocalFile();
+        return;
+      }
+      ide.importMedia("Sounds");
+  };
 
   this.changed();
 
@@ -12545,53 +12467,8 @@ JukeboxMorph.prototype.updateList = function () {
   txt.setColor(SpriteMorph.prototype.paletteTextColor);
   txt.setPosition(new Point(x, y));
   this.addContents(txt);
-  newButton = new PushButtonMorph(
-    ide,
-    () => {
-      if (location.protocol === "file:") {
-        this.importLocalFile();
-        return;
-      }
-      ide.importMedia("Sounds");
-    },
-    new SymbolMorph("cross", 15),
-  );
 
-  recordButton = new PushButtonMorph(
-    ide,
-    "recordNewSound",
-    new SymbolMorph("circleSolid", 15),
-  );
-  newButton.padding = 0;
-  newButton.corner = 4;
-  newButton.color = IDE_Morph.prototype.groupColor;
-  newButton.labelMinExtent = new Point(36, 18);
-  newButton.labelShadowOffset = new Point(-1, -1);
-  newButton.labelShadowColor = newButton.highlightColor;
-  newButton.labelColor = TurtleIconMorph.prototype.labelColor;
-  newButton.contrast = this.buttonContrast;
-  newButton.hint = "Record a new sound";
-  newButton.fixLayout();
-  newButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
-
-  this.addContents(newButton);
-
-  recordButton.padding = 0;
-  recordButton.corner = 4;
-  recordButton.color = IDE_Morph.prototype.groupColor;
-  recordButton.labelMinExtent = new Point(36, 18);
-  recordButton.labelShadowOffset = new Point(-1, -1);
-  recordButton.labelShadowColor = recordButton.highlightColor;
-  recordButton.labelColor = TurtleIconMorph.prototype.labelColor;
-  recordButton.contrast = this.buttonContrast;
-  recordButton.hint = "Record a new sound";
-  recordButton.fixLayout();
-  recordButton.label.setColor(new Color(255, 20, 20));
-  recordButton.setPosition(newButton.topRight().add(new Point(padding * 2, 0)));
-
-  this.addContents(recordButton);
-
-  y = recordButton.bottom() + padding;
+  y = txt.bottom() + padding;
 
   this.sprite.sounds.asArray().forEach((sound) => {
     icon = new SoundIconMorph(sound);
@@ -12601,9 +12478,29 @@ JukeboxMorph.prototype.updateList = function () {
   });
   this.soundsVersion = this.sprite.sounds.lastChanged;
 
+  // newSoundFlyout
+  if (this.newSoundFlyout) {
+    this.newSoundFlyout.destroy();
+  }
+  this.newSoundFlyout = new ScratchFlyoutMorph(this, getSoundFromLibrary, "speakers", IDE_Morph.prototype.accentColor);
+  this.newSoundFlyout.addItem(getSoundFromLibrary, "magnifierOutline");
+  this.newSoundFlyout.addItem(ide.recordNewSound, "circleSolid");
+  this.newSoundFlyout.build();
+  this.add(this.newSoundFlyout);
+
+  
   this.changed();
   this.updateSelection();
+
+  this.newSoundFlyout.setLeft(this.left() + 10);
+  this.newSoundFlyout.setBottom(this.bottom() - 5);
 };
+
+JukeboxMorph.prototype.fixLayout = function () {
+  JukeboxMorph.uber.fixLayout.call(this);
+  this.newSoundFlyout.setLeft(this.left() + 10);
+  this.newSoundFlyout.setBottom(this.bottom() - 5);
+}
 
 JukeboxMorph.prototype.updateSelection = function () {
   this.contents.children.forEach((morph) => {
@@ -13957,7 +13854,7 @@ ScratchFlyoutMorph.prototype.build = function() {
   this.button = new PushButtonMorph(
     this.target,
     this.action,
-    new SymbolMorph(this.icon, 28),
+    new SymbolMorph(this.icon, 28, WHITE),
   );
   this.button.color = this.accent;
   this.button.corner = 26;
@@ -13970,9 +13867,10 @@ ScratchFlyoutMorph.prototype.build = function() {
   this.button.setBottom(this.bottom());
   this.button.mouseEnter = () => {
     PushButtonMorph.prototype.mouseEnter.call(this.button);
-
+    
     this.showFlyout();
   }
+  this.button.label.color = WHITE;
   this.add(this.button);
 }
 
