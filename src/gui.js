@@ -2430,6 +2430,17 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
   // newSpriteFlyout
   this.corral.newSpriteFlyout = new ScratchFlyoutMorph(this, "addNewSprite", "newSprite", this.accentColor);
+  this.corral.newSpriteFlyout.addItem(() => {
+    this.addNewSprite(true);
+    const ide = this.parentThatIsA(IDE_Morph);
+    if (location.protocol === "file:") {
+      this.importLocalFile();
+      return;
+    }
+    ide.importMedia(
+      ide.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
+    );
+  }, "magnifierOutline");
   this.corral.newSpriteFlyout.addItem(() => { this.addNewSprite(true); }, "turtle");
   this.corral.newSpriteFlyout.addItem("newCamSprite", "camera");
   this.corral.newSpriteFlyout.addItem("paintNewSprite", "brush");
@@ -11983,7 +11994,7 @@ WardrobeMorph.prototype.updateList = function () {
         ide.currentSprite instanceof SpriteMorph ? "Costumes" : "Backdrops",
       );
     };
-  this.newCostumeFlyout = new ScratchFlyoutMorph(this, openNewCostume, "cross", IDE_Morph.prototype.accentColor);
+  this.newCostumeFlyout = new ScratchFlyoutMorph(this, openNewCostume, "newSprite", IDE_Morph.prototype.accentColor);
   this.newCostumeFlyout.addItem(openNewCostume, "magnifierOutline");
   this.newCostumeFlyout.addItem("paintNew", "brush");
   this.newCostumeFlyout.addItem("newFromCam", "camera");
@@ -13592,6 +13603,7 @@ CorralStageMorph.prototype.buildContents = function () {
   this.add(this.backdrops);
 
   this.newBackdropFlyout = new ScratchFlyoutMorph(this, "addNewBackdrop", "newBackdrop", this.ide.accentColor);
+  this.newBackdropFlyout.addItem("addNewBackdrop", "magnifierOutline")
   this.newBackdropFlyout.addItem("paintNewBackdrop", "brush");
   this.newBackdropFlyout.build();
   this.add(this.newBackdropFlyout);
