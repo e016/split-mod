@@ -4383,7 +4383,11 @@ Process.prototype.decodeSound = function (sound, callback, noContext) {
       },
       (err) => {
         sound.isDecoding = false;
-        this.handleError(err);
+        if (noContext) {
+          throw new Error(err)
+        } else {
+          this.handleError(err);
+        }
       },
     );
   }
