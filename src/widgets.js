@@ -924,6 +924,7 @@ function TabMorph(
   hint,
 ) {
   this.init(colors, target, action, labelString, query, environment, hint);
+  this.outlineColor = new Color(255, 255, 255, 0.15)
 }
 
 // TabMorph label
@@ -1048,7 +1049,7 @@ TabMorph.prototype.refresh = function () {
 
 // TabMorph drawing:
 
-TabMorph.prototype.drawBackground = function (ctx, color, inset) {
+TabMorph.prototype.outlinePath = function (ctx, corner, inset) {
   if (!inset) {
     inset = 0;
   }
@@ -1056,7 +1057,6 @@ TabMorph.prototype.drawBackground = function (ctx, color, inset) {
     h = this.height(),
     c = this.corner;
 
-  ctx.fillStyle = color.toString();
   ctx.beginPath();
   ctx.moveTo(inset, h);
   ctx.arc(0 + c + inset, 0 + c + inset, c, radians(-180), radians(-90));
@@ -1064,10 +1064,6 @@ TabMorph.prototype.drawBackground = function (ctx, color, inset) {
   ctx.lineTo(w - inset, h);
   ctx.closePath();
   ctx.fill();
-};
-
-TabMorph.prototype.drawOutline = function () {
-  nop();
 };
 
 TabMorph.prototype.drawEdges = function (
