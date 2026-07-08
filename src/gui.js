@@ -102,7 +102,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.7.2";
+var SplitVersion = "2.8.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3682,23 +3682,24 @@ IDE_Morph.prototype.newCamSprite = function () {
 };
 
 IDE_Morph.prototype.recordNewSound = function () {
-  var soundRecorder;
+  var soundRecorder,
+  myself = this;
 
   soundRecorder = new SoundRecorderDialogMorph((audio) => {
     var sound;
     if (audio) {
-      sound = this.currentSprite.addSound(
+      sound = myself.currentSprite.addSound(
         audio,
-        this.newSoundName("recording"),
+        myself.newSoundName("recording"),
       );
-      this.makeSureRecordingIsMono(sound);
-      this.oldSpriteBar.tabBar.tabTo("sounds");
-      this.hasChangedMedia = true;
+      myself.makeSureRecordingIsMono(sound);
+      myself.oldSpriteBar.tabBar.tabTo("sounds");
+      myself.hasChangedMedia = true;
     }
   });
 
   soundRecorder.key = "microphone";
-  soundRecorder.popUp(this.world());
+  soundRecorder.popUp(myself.world());
 };
 
 IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
@@ -12033,7 +12034,6 @@ WardrobeMorph.prototype.createEditor = function (isNew) {
         return;
       }
     }
-    console.warn(isNew);
     this.editor.openIn(
       this,
       isNew ? newCanvas(ide.stage.dimensions) : this.sprite.costume.contents,
@@ -12226,9 +12226,18 @@ SoundIconMorph.prototype.init = function (aSound) {
     IDE_Morph.prototype.frameColor,
   ];
 
-  action = nop; // When I am selected (which is never the case for sounds)
+  query = () => this.parentThatIsA(JukeboxMorph)?.selectedSound === this.object;
 
-  query = () => false;
+  action = () => {
+    var jukebox = this.parentThatIsA(JukeboxMorph);
+    
+    if (jukebox) {
+      jukebox.selectedSound = this.object;
+      jukebox.updateList();
+      jukebox.fixLayout();
+    }
+  }; // When I am selected (which is never the case for sounds)
+
 
   // additional properties:
   this.object = aSound; // mandatory, actually
@@ -12376,7 +12385,7 @@ SoundIconMorph.prototype.renameSound = function () {
 
 SoundIconMorph.prototype.removeSound = function () {
   var jukebox = this.parentThatIsA(JukeboxMorph),
-    idx = this.parent.children.indexOf(this) - 1;
+    idx = this.parent.children.indexOf(this) - 0;
   jukebox.removeSound(idx);
   jukebox.sprite.recordUserEdit("sound", "delete", idx, this.object.name);
 };
@@ -12432,7 +12441,7 @@ JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
   this.sprite = aSprite || new SpriteMorph();
   this.soundsVersion = null;
   this.spriteVersion = null;
-
+  this.selectedSound = this.sprite.sounds.at(1) || null
   // initialize inherited properties
   JukeboxMorph.uber.init.call(this, null, null, sliderColor);
 
@@ -12471,15 +12480,17 @@ JukeboxMorph.prototype.updateList = function () {
   this.contents.reactToDropOf = (icon) => this.reactToDropOf(icon);
   this.addBack(this.contents);
 
+  if (this.txt) {
+    this.txt.destroy();
+  }
   txt = new TextMorph(
     localize("import a sound from your computer\nby dragging it into here"),
   );
   txt.fontSize = 9;
   txt.setColor(SpriteMorph.prototype.paletteTextColor);
-  txt.setPosition(new Point(x, y));
-  this.addContents(txt);
-
-  y = txt.bottom() + padding;
+  txt.setPosition(new Point(this.left() + 105, this.bottom() - padding));
+  this.txt = txt;
+  this.add(txt);
 
   this.sprite.sounds.asArray().forEach((sound) => {
     icon = new SoundIconMorph(sound);
@@ -12495,9 +12506,11 @@ JukeboxMorph.prototype.updateList = function () {
   }
   this.newSoundFlyout = new ScratchFlyoutMorph(this, getSoundFromLibrary, "speakers", IDE_Morph.prototype.accentColor);
   this.newSoundFlyout.addItem(getSoundFromLibrary, "magnifierOutline");
-  this.newSoundFlyout.addItem(ide.recordNewSound, "circleSolid");
+  this.newSoundFlyout.addItem(() => ide.recordNewSound(), "circleSolid");
   this.newSoundFlyout.build();
   this.add(this.newSoundFlyout);
+
+  this.createEditor();
 
   
   this.changed();
@@ -12507,10 +12520,25 @@ JukeboxMorph.prototype.updateList = function () {
   this.newSoundFlyout.setBottom(this.bottom() - 5);
 };
 
+JukeboxMorph.prototype.createEditor = function () {
+  if (this.editor) {
+    this.editor.destroy();
+  }
+  this.editor = new WaveformEditorMorph(this.selectedSound);
+  this.add(this.editor);
+}
+
 JukeboxMorph.prototype.fixLayout = function () {
   JukeboxMorph.uber.fixLayout.call(this);
+  this.txt.setPosition(new Point(this.right() - this.txt.width() - 4, this.bottom() - this.txt.height() - 4));
   this.newSoundFlyout.setLeft(this.left() + 10);
   this.newSoundFlyout.setBottom(this.bottom() - 5);
+  if (this.editor) {
+    this.editor.setLeft(this.left() + 100 + 5);
+    this.editor.setTop(this.top() + 5);
+    this.editor.setHeight(this.height() / 2);
+    this.editor.bounds.corner.x = this.right() - 5
+  }
 }
 
 JukeboxMorph.prototype.updateSelection = function () {
@@ -13894,4 +13922,66 @@ ScratchFlyoutMorph.prototype.mouseLeave = function() {
 
 ScratchFlyoutMorph.prototype.showFlyout = function() {
   this.children.filter(c => !(c instanceof PushButtonMorph)).forEach(c => c.show());
+}
+
+
+// WaveformEditorMorph
+
+// I display a waveform of any given sound.
+
+// WaveformEditorMorph inherits from Morph:
+
+WaveformEditorMorph.prototype = new Morph();
+WaveformEditorMorph.prototype.constructor = WaveformEditorMorph;
+WaveformEditorMorph.uber = Morph.prototype;
+
+// WaveformEditorMorph instance creation
+
+function WaveformEditorMorph(sound) {
+  this.init(sound);
+}
+
+WaveformEditorMorph.prototype.init = function (sound) {
+  WaveformEditorMorph.uber.init.call(this);
+  this.sound = sound;
+  this.samples = [];
+  this.isDecoded = false;
+  this.color = new Color(222, 145, 222);
+
+  this.getWaveformSamples();
+}
+
+WaveformEditorMorph.prototype.getWaveformSamples = async function () {
+  if (this.sound) {
+    Process.prototype.decodeSound(this.sound, () => {
+      this.samples = Process.prototype.reportGetSoundAttribute("samples", this.sound, true);
+      this.samples = this.samples?.asArray?.() || []
+      this.isDecoded = true;
+      this.rerender();
+    }, true);
+  }
+}
+
+WaveformEditorMorph.prototype.render = function (ctx) {
+  let width = this.width(),
+  height = this.height();
+  ctx.fillStyle = "rgba(207, 99, 207, 0.15)";
+  ctx.fillRect(0, 0, width, height)
+  if (!this.isDecoded && this.sound) {
+    ctx.fillStyle = this.color.toString();
+    ctx.fillText("Loading...", 10, 10)
+    return;
+  }
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = this.color.toString();
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath()
+  ctx.moveTo(0, height / 2)
+  this.samples.forEach(
+    (sample, index) => {
+      ctx.lineTo((index / this.samples.length) * width, (sample * height / 2) + height / 2)
+    }
+  );
+  ctx.stroke()
 }

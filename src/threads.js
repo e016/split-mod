@@ -4303,7 +4303,7 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
   return source;
 };
 
-Process.prototype.reportGetSoundAttribute = function (choice, soundName, noContext) {
+Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
   var sound =
       soundName instanceof Sound
         ? soundName
@@ -4321,7 +4321,7 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName, noConte
   }
 
   if (!sound.audioBuffer) {
-    this.decodeSound(sound, null, noContext);
+    this.decodeSound(sound);
     return;
   }
 
@@ -4379,6 +4379,7 @@ Process.prototype.decodeSound = function (sound, callback, noContext) {
       (buffer) => {
         sound.audioBuffer = buffer;
         sound.isDecoding = false;
+        (callback || nop)(sound);
       },
       (err) => {
         sound.isDecoding = false;
