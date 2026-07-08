@@ -1,74 +1,1207 @@
 [
-  {
-    "fileName": "Cat.mp3",
-    "name": "Cat",
-    "translations": {
+    {
+        "fileName": "A_bass.wav",
+        "name": "A bass",
+        "translations": {}
+    },
+    {
+        "fileName": "A_elec_bass.wav",
+        "name": "A elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "A_elec_guitar.wav",
+        "name": "A elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "A_elec_piano.wav",
+        "name": "A elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "A_guitar.wav",
+        "name": "A guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "A_minor_ukulele.wav",
+        "name": "A minor ukulele",
+        "translations": {}
+    },
+    {
+        "fileName": "A_piano.wav",
+        "name": "A piano",
+        "translations": {}
+    },
+    {
+        "fileName": "A_sax.wav",
+        "name": "A sax",
+        "translations": {}
+    },
+    {
+        "fileName": "A_trombone.wav",
+        "name": "A trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "A_trumpet.wav",
+        "name": "A trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "afro_string.wav",
+        "name": "afro string",
+        "translations": {}
+    },
+    {
+        "fileName": "alien_creak1.wav",
+        "name": "alien creak1",
+        "translations": {}
+    },
+    {
+        "fileName": "alien_creak2.wav",
+        "name": "alien creak2",
+        "translations": {}
+    },
+    {
+        "fileName": "B_bass.wav",
+        "name": "B bass",
+        "translations": {}
+    },
+    {
+        "fileName": "B_elec_bass.wav",
+        "name": "B elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "B_elec_guitar.wav",
+        "name": "B elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "B_elec_piano.wav",
+        "name": "B elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "B_guitar.wav",
+        "name": "B guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "B_piano.wav",
+        "name": "B piano",
+        "translations": {}
+    },
+    {
+        "fileName": "B_sax.wav",
+        "name": "B sax",
+        "translations": {}
+    },
+    {
+        "fileName": "B_trombone.wav",
+        "name": "B trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "B_trumpet.wav",
+        "name": "B trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "bass_beatbox.wav",
+        "name": "bass beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "beat_box1.wav",
+        "name": "beat box1",
+        "translations": {}
+    },
+    {
+        "fileName": "beat_box2.wav",
+        "name": "beat box2",
+        "translations": {}
+    },
+    {
+        "fileName": "bell_cymbal.wav",
+        "name": "bell cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "bell_toll.wav",
+        "name": "bell toll",
+        "translations": {}
+    },
+    {
+        "fileName": "bird.wav",
+        "name": "bird",
+        "translations": {}
+    },
+    {
+        "fileName": "birthday_bells.wav",
+        "name": "birthday bells",
+        "translations": {}
+    },
+    {
+        "fileName": "birthday.wav",
+        "name": "birthday",
+        "translations": {}
+    },
+    {
+        "fileName": "boing.wav",
+        "name": "boing",
+        "translations": {}
+    },
+    {
+        "fileName": "bubbles.wav",
+        "name": "bubbles",
+        "translations": {}
+    },
+    {
+        "fileName": "buzz_whir.wav",
+        "name": "buzz whir",
+        "translations": {}
+    },
+    {
+        "fileName": "C_bass.wav",
+        "name": "C bass",
+        "translations": {}
+    },
+    {
+        "fileName": "C_elec_bass.wav",
+        "name": "C elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "C_elec_guitar.wav",
+        "name": "C elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "C_elec_piano.wav",
+        "name": "C elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "C_guitar.wav",
+        "name": "C guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "C_major_ukulele.wav",
+        "name": "C major ukulele",
+        "translations": {}
+    },
+    {
+        "fileName": "C_piano.wav",
+        "name": "C piano",
+        "translations": {}
+    },
+    {
+        "fileName": "C_sax.wav",
+        "name": "C sax",
+        "translations": {}
+    },
+    {
+        "fileName": "C_trombone.wav",
+        "name": "C trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "C_trumpet.wav",
+        "name": "C trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_bass.wav",
+        "name": "C2 bass",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_elec_bass.wav",
+        "name": "C2 elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_elec_guitar.wav",
+        "name": "C2 elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_elec_piano.wav",
+        "name": "C2 elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_guitar.wav",
+        "name": "C2 guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_piano.wav",
+        "name": "C2 piano",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_sax.wav",
+        "name": "C2 sax",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_trombone.wav",
+        "name": "C2 trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "C2_trumpet.wav",
+        "name": "C2 trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "car_passing.wav",
+        "name": "car passing",
+        "translations": {}
+    },
+    {
+        "fileName": "Cat.mp3",
+        "name": "Cat",
+        "translations": {}
+    },
+    {
+        "fileName": "cave.wav",
+        "name": "cave",
+        "translations": {}
+    },
+    {
+        "fileName": "chee_chee.wav",
+        "name": "chee chee",
+        "translations": {}
+    },
+    {
+        "fileName": "cheer.wav",
+        "name": "cheer",
+        "translations": {}
+    },
+    {
+        "fileName": "chomp.wav",
+        "name": "chomp",
+        "translations": {}
+    },
+    {
+        "fileName": "Chord.wav",
+        "name": "Chord",
+        "translations": {}
+    },
+    {
+        "fileName": "clap_beatbox.wav",
+        "name": "clap beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "clapping.wav",
+        "name": "clapping",
+        "translations": {}
+    },
+    {
+        "fileName": "computer_beeps1.wav",
+        "name": "computer beeps1",
+        "translations": {}
+    },
+    {
+        "fileName": "computer_beeps2.wav",
+        "name": "computer beeps2",
+        "translations": {}
+    },
+    {
+        "fileName": "cough-female.wav",
+        "name": "cough-female",
+        "translations": {}
+    },
+    {
+        "fileName": "cough-male.wav",
+        "name": "cough-male",
+        "translations": {}
+    },
+    {
+        "fileName": "crash_beatbox.wav",
+        "name": "crash beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "crash_cymbal.wav",
+        "name": "crash cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "cricket.wav",
+        "name": "cricket",
+        "translations": {}
+    },
+    {
+        "fileName": "crickets.wav",
+        "name": "crickets",
+        "translations": {}
+    },
+    {
+        "fileName": "cymbal_crash.wav",
+        "name": "cymbal crash",
+        "translations": {}
+    },
+    {
+        "fileName": "cymbal_echo.wav",
+        "name": "cymbal echo",
+        "translations": {}
+    },
+    {
+        "fileName": "cymbal.wav",
+        "name": "cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "D_bass.wav",
+        "name": "D bass",
+        "translations": {}
+    },
+    {
+        "fileName": "D_elec_bass.wav",
+        "name": "D elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "D_elec_guitar.wav",
+        "name": "D elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "D_elec_piano.wav",
+        "name": "D elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "D_guitar.wav",
+        "name": "D guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "D_piano.wav",
+        "name": "D piano",
+        "translations": {}
+    },
+    {
+        "fileName": "D_sax.wav",
+        "name": "D sax",
+        "translations": {}
+    },
+    {
+        "fileName": "D_trombone.wav",
+        "name": "D trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "D_trumpet.wav",
+        "name": "D trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_around.wav",
+        "name": "dance around",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_celebrate.wav",
+        "name": "dance celebrate",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_chill_out.wav",
+        "name": "dance chill out",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_funky.wav",
+        "name": "dance funky",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_head_nod.wav",
+        "name": "dance head nod",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_magic.wav",
+        "name": "dance magic",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_slow_mo.wav",
+        "name": "dance slow mo",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_snare_beat.wav",
+        "name": "dance snare beat",
+        "translations": {}
+    },
+    {
+        "fileName": "dance_space.wav",
+        "name": "dance space",
+        "translations": {}
+    },
+    {
+        "fileName": "Dog1.wav",
+        "name": "Dog1",
+        "translations": {}
+    },
+    {
+        "fileName": "Dog2.wav",
+        "name": "Dog2",
+        "translations": {}
+    },
+    {
+        "fileName": "door_creak.wav",
+        "name": "door creak",
+        "translations": {}
+    },
+    {
+        "fileName": "drip_drop.wav",
+        "name": "drip drop",
+        "translations": {}
+    },
+    {
+        "fileName": "drive_around.wav",
+        "name": "drive around",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_bass1.wav",
+        "name": "drum bass1",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_bass2.wav",
+        "name": "drum bass2",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_bass3.wav",
+        "name": "drum bass3",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_buzz.wav",
+        "name": "drum buzz",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_funky.wav",
+        "name": "drum funky",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_jam.wav",
+        "name": "drum jam",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_machine.wav",
+        "name": "drum machine",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_satellite.wav",
+        "name": "drum satellite",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_set1.wav",
+        "name": "drum set1",
+        "translations": {}
+    },
+    {
+        "fileName": "drum_set2.wav",
+        "name": "drum set2",
+        "translations": {}
+    },
+    {
+        "fileName": "drum.wav",
+        "name": "drum",
+        "translations": {}
+    },
+    {
+        "fileName": "duck.wav",
+        "name": "duck",
+        "translations": {}
+    },
+    {
+        "fileName": "E_bass.wav",
+        "name": "E bass",
+        "translations": {}
+    },
+    {
+        "fileName": "E_elec_bass.wav",
+        "name": "E elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "E_elec_guitar.wav",
+        "name": "E elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "E_elec_piano.wav",
+        "name": "E elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "E_guitar.wav",
+        "name": "E guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "E_piano.wav",
+        "name": "E piano",
+        "translations": {}
+    },
+    {
+        "fileName": "E_sax.wav",
+        "name": "E sax",
+        "translations": {}
+    },
+    {
+        "fileName": "E_trombone.wav",
+        "name": "E trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "E_trumpet.wav",
+        "name": "E trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "eggs.wav",
+        "name": "eggs",
+        "translations": {}
+    },
+    {
+        "fileName": "elec_piano_A_minor.wav",
+        "name": "elec piano A minor",
+        "translations": {}
+    },
+    {
+        "fileName": "elec_piano_C_major.wav",
+        "name": "elec piano C major",
+        "translations": {}
+    },
+    {
+        "fileName": "elec_piano_F_major.wav",
+        "name": "elec piano F major",
+        "translations": {}
+    },
+    {
+        "fileName": "elec_piano_G_major.wav",
+        "name": "elec piano G major",
+        "translations": {}
+    },
+    {
+        "fileName": "elec_piano_loop.wav",
+        "name": "elec piano loop",
+        "translations": {}
+    },
+    {
+        "fileName": "F_bass.wav",
+        "name": "F bass",
+        "translations": {}
+    },
+    {
+        "fileName": "F_elec_bass.wav",
+        "name": "F elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "F_elec_guitar.wav",
+        "name": "F elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "F_elec_piano.wav",
+        "name": "F elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "F_guitar.wav",
+        "name": "F guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "F_major_ukulele.wav",
+        "name": "F major ukulele",
+        "translations": {}
+    },
+    {
+        "fileName": "F_piano.wav",
+        "name": "F piano",
+        "translations": {}
+    },
+    {
+        "fileName": "F_sax.wav",
+        "name": "F sax",
+        "translations": {}
+    },
+    {
+        "fileName": "F_trombone.wav",
+        "name": "F trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "F_trumpet.wav",
+        "name": "F trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "fairydust.wav",
+        "name": "fairydust",
+        "translations": {}
+    },
+    {
+        "fileName": "finger_snap.wav",
+        "name": "finger snap",
+        "translations": {}
+    },
+    {
+        "fileName": "FingerSnap.wav",
+        "name": "FingerSnap",
+        "translations": {}
+    },
+    {
+        "fileName": "flam_snare.wav",
+        "name": "flam snare",
+        "translations": {}
+    },
+    {
+        "fileName": "footsteps-1.wav",
+        "name": "footsteps-1",
+        "translations": {}
+    },
+    {
+        "fileName": "G_bass.wav",
+        "name": "G bass",
+        "translations": {}
+    },
+    {
+        "fileName": "G_elec_bass.wav",
+        "name": "G elec bass",
+        "translations": {}
+    },
+    {
+        "fileName": "G_elec_guitar.wav",
+        "name": "G elec guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "G_elec_piano.wav",
+        "name": "G elec piano",
+        "translations": {}
+    },
+    {
+        "fileName": "G_guitar.wav",
+        "name": "G guitar",
+        "translations": {}
+    },
+    {
+        "fileName": "G_piano.wav",
+        "name": "G piano",
+        "translations": {}
+    },
+    {
+        "fileName": "G_sax.wav",
+        "name": "G sax",
+        "translations": {}
+    },
+    {
+        "fileName": "G_trombone.wav",
+        "name": "G trombone",
+        "translations": {}
+    },
+    {
+        "fileName": "G_trumpet.wav",
+        "name": "G trumpet",
+        "translations": {}
+    },
+    {
+        "fileName": "G_ukulele.wav",
+        "name": "G ukulele",
+        "translations": {}
+    },
+    {
+        "fileName": "garden.wav",
+        "name": "garden",
+        "translations": {}
+    },
+    {
+        "fileName": "gong.wav",
+        "name": "gong",
+        "translations": {}
+    },
+    {
+        "fileName": "goose.wav",
+        "name": "goose",
+        "translations": {}
+    },
+    {
+        "fileName": "guitar_chords1.wav",
+        "name": "guitar chords1",
+        "translations": {}
+    },
+    {
+        "fileName": "guitar_chords2.wav",
+        "name": "guitar chords2",
+        "translations": {}
+    },
+    {
+        "fileName": "guitar_strum.wav",
+        "name": "guitar strum",
+        "translations": {}
+    },
+    {
+        "fileName": "hand_clap.wav",
+        "name": "hand clap",
+        "translations": {}
+    },
+    {
+        "fileName": "hey.wav",
+        "name": "hey",
+        "translations": {}
+    },
+    {
+        "fileName": "hi_beatbox.wav",
+        "name": "hi beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "hi_na_tabla.wav",
+        "name": "hi na tabla",
+        "translations": {}
+    },
+    {
+        "fileName": "hi_tun_tabla.wav",
+        "name": "hi tun tabla",
+        "translations": {}
+    },
+    {
+        "fileName": "high_conga.wav",
+        "name": "high conga",
+        "translations": {}
+    },
+    {
+        "fileName": "high_hat.wav",
+        "name": "high hat",
+        "translations": {}
+    },
+    {
+        "fileName": "high_tom.wav",
+        "name": "high tom",
+        "translations": {}
+    },
+    {
+        "fileName": "hihat_cymbal.wav",
+        "name": "hihat cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "hip_hop.wav",
+        "name": "hip hop",
+        "translations": {}
+    },
+    {
+        "fileName": "horse_gallop.wav",
+        "name": "horse gallop",
+        "translations": {}
+    },
+    {
+        "fileName": "horse.wav",
+        "name": "horse",
+        "translations": {}
+    },
+    {
+        "fileName": "human_beatbox1.wav",
+        "name": "human beatbox1",
+        "translations": {}
+    },
+    {
+        "fileName": "human_beatbox2.wav",
+        "name": "human beatbox2",
+        "translations": {}
+    },
+    {
+        "fileName": "jungle.wav",
+        "name": "jungle",
+        "translations": {}
+    },
+    {
+        "fileName": "kick_back.wav",
+        "name": "kick back",
+        "translations": {}
+    },
+    {
+        "fileName": "Kitten.wav",
+        "name": "Kitten",
+        "translations": {}
+    },
+    {
+        "fileName": "large_cowbell.wav",
+        "name": "large cowbell",
+        "translations": {}
+    },
+    {
+        "fileName": "laser1.wav",
+        "name": "laser1",
+        "translations": {}
+    },
+    {
+        "fileName": "laser2.wav",
+        "name": "laser2",
+        "translations": {}
+    },
+    {
+        "fileName": "Laugh-female.wav",
+        "name": "Laugh-female",
+        "translations": {}
+    },
+    {
+        "fileName": "Laugh-male1.wav",
+        "name": "Laugh-male1",
+        "translations": {}
+    },
+    {
+        "fileName": "Laugh-male2.wav",
+        "name": "Laugh-male2",
+        "translations": {}
+    },
+    {
+        "fileName": "Laugh-male3.mp3",
+        "name": "Laugh-male3",
+        "translations": {}
+    },
+    {
+        "fileName": "lo_geh_tabla.wav",
+        "name": "lo geh tabla",
+        "translations": {}
+    },
+    {
+        "fileName": "lo_gliss_tabla.wav",
+        "name": "lo gliss tabla",
+        "translations": {}
+    },
+    {
+        "fileName": "low_conga.wav",
+        "name": "low conga",
+        "translations": {}
+    },
+    {
+        "fileName": "low_tom.wav",
+        "name": "low tom",
+        "translations": {}
+    },
+    {
+        "fileName": "medieval1.wav",
+        "name": "medieval1",
+        "translations": {}
+    },
+    {
+        "fileName": "medieval2.wav",
+        "name": "medieval2",
+        "translations": {}
+    },
+    {
+        "fileName": "Meow.wav",
+        "name": "Meow",
+        "translations": {}
+    },
+    {
+        "fileName": "meow2.wav",
+        "name": "meow2",
+        "translations": {}
+    },
+    {
+        "fileName": "motorcycle_passing.wav",
+        "name": "motorcycle passing",
+        "translations": {}
+    },
+    {
+        "fileName": "muted_conga.wav",
+        "name": "muted conga",
+        "translations": {}
+    },
+    {
+        "fileName": "odesong-b.wav",
+        "name": "odesong-b",
+        "translations": {}
+    },
+    {
+        "fileName": "owl.wav",
+        "name": "owl",
+        "translations": {}
+    },
+    {
+        "fileName": "party_noise.wav",
+        "name": "party noise",
+        "translations": {}
+    },
+    {
+        "fileName": "plunge.wav",
+        "name": "plunge",
+        "translations": {}
+    },
+    {
+        "fileName": "Pop.wav",
+        "name": "Pop",
+        "translations": {}
+    },
+    {
+        "fileName": "rattle.wav",
+        "name": "rattle",
+        "translations": {}
+    },
+    {
+        "fileName": "ride_cymbal.wav",
+        "name": "ride cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "ripples.wav",
+        "name": "ripples",
+        "translations": {}
+    },
+    {
+        "fileName": "roll_cymbal.wav",
+        "name": "roll cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "rooster.wav",
+        "name": "rooster",
+        "translations": {}
+    },
+    {
+        "fileName": "scratch_beatbox.wav",
+        "name": "scratch beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "scratchy_beat.wav",
+        "name": "scratchy beat",
+        "translations": {}
+    },
+    {
+        "fileName": "scream-female.wav",
+        "name": "scream-female",
+        "translations": {}
+    },
+    {
+        "fileName": "scream-male1.wav",
+        "name": "scream-male1",
+        "translations": {}
+    },
+    {
+        "fileName": "screech.wav",
+        "name": "screech",
+        "translations": {}
+    },
+    {
+        "fileName": "shaker.wav",
+        "name": "shaker",
+        "translations": {}
+    },
+    {
+        "fileName": "sidestick_snare.wav",
+        "name": "sidestick snare",
+        "translations": {}
+    },
+    {
+        "fileName": "singer1.wav",
+        "name": "singer1",
+        "translations": {}
+    },
+    {
+        "fileName": "singer2.wav",
+        "name": "singer2",
+        "translations": {}
+    },
+    {
+        "fileName": "small_cowbell.wav",
+        "name": "small cowbell",
+        "translations": {}
+    },
+    {
+        "fileName": "snap.wav",
+        "name": "snap",
+        "translations": {}
+    },
+    {
+        "fileName": "snare_beatbox.wav",
+        "name": "snare beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "snare_beatbox2.wav",
+        "name": "snare beatbox2",
+        "translations": {}
+    },
+    {
+        "fileName": "snare_drum.wav",
+        "name": "snare drum",
+        "translations": {}
+    },
+    {
+        "fileName": "sneeze-female.wav",
+        "name": "sneeze-female",
+        "translations": {}
+    },
+    {
+        "fileName": "sneeze-male.wav",
+        "name": "sneeze-male",
+        "translations": {}
+    },
+    {
+        "fileName": "space_ripple.wav",
+        "name": "space ripple",
+        "translations": {}
+    },
+    {
+        "fileName": "spiral.wav",
+        "name": "spiral",
+        "translations": {}
+    },
+    {
+        "fileName": "splash_cymbal.wav",
+        "name": "splash cymbal",
+        "translations": {}
+    },
+    {
+        "fileName": "spooky_string.wav",
+        "name": "spooky string",
+        "translations": {}
+    },
+    {
+        "fileName": "squawk.wav",
+        "name": "squawk",
+        "translations": {}
+    },
+    {
+        "fileName": "string_accent.wav",
+        "name": "string accent",
+        "translations": {}
+    },
+    {
+        "fileName": "string_pluck.wav",
+        "name": "string pluck",
+        "translations": {}
+    },
+    {
+        "fileName": "suspense.wav",
+        "name": "suspense",
+        "translations": {}
+    },
+    {
+        "fileName": "tambura.wav",
+        "name": "tambura",
+        "translations": {}
+    },
+    {
+        "fileName": "tap_conga.wav",
+        "name": "tap conga",
+        "translations": {}
+    },
+    {
+        "fileName": "tap_snare.wav",
+        "name": "tap snare",
+        "translations": {}
+    },
+    {
+        "fileName": "techno.wav",
+        "name": "techno",
+        "translations": {}
+    },
+    {
+        "fileName": "techno2.wav",
+        "name": "techno2",
+        "translations": {}
+    },
+    {
+        "fileName": "tom_drum.wav",
+        "name": "tom drum",
+        "translations": {}
+    },
+    {
+        "fileName": "triumph.wav",
+        "name": "triumph",
+        "translations": {}
+    },
+    {
+        "fileName": "trumpet1.wav",
+        "name": "trumpet1",
+        "translations": {}
+    },
+    {
+        "fileName": "trumpet2.wav",
+        "name": "trumpet2",
+        "translations": {}
+    },
+    {
+        "fileName": "wah_beatbox.wav",
+        "name": "wah beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "water_drop.wav",
+        "name": "water drop",
+        "translations": {}
+    },
+    {
+        "fileName": "whoop.wav",
+        "name": "whoop",
+        "translations": {}
+    },
+    {
+        "fileName": "wolf_howl.wav",
+        "name": "wolf howl",
+        "translations": {}
+    },
+    {
+        "fileName": "wub_beatbox.wav",
+        "name": "wub beatbox",
+        "translations": {}
+    },
+    {
+        "fileName": "xylo1.wav",
+        "name": "xylo1",
+        "translations": {}
+    },
+    {
+        "fileName": "xylo2.wav",
+        "name": "xylo2",
+        "translations": {}
+    },
+    {
+        "fileName": "xylo3.wav",
+        "name": "xylo3",
+        "translations": {}
+    },
+    {
+        "fileName": "xylo4.wav",
+        "name": "xylo4",
+        "translations": {}
+    },
+    {
+        "fileName": "ya.wav",
+        "name": "ya",
+        "translations": {}
+    },
+    {
+        "fileName": "zoop.wav",
+        "name": "zoop",
+        "translations": {}
     }
-  },
-  {
-    "fileName": "Chord.wav",
-    "name": "Chord",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Dog1.wav",
-    "name": "Dog 1",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Dog2.wav",
-    "name": "Dog 2",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "FingerSnap.wav",
-    "name": "Finger Snap",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Kitten.wav",
-    "name": "Kitten",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Laugh-female.wav",
-    "name": "Laugh Female",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Laugh-male1.wav",
-    "name": "Laugh Male 1",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Laugh-male2.wav",
-    "name": "Laugh Male 2",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Laugh-male3.mp3",
-    "name": "Laugh Male 3",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Meow.wav",
-    "name": "Meow",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Pop.wav",
-    "name": "Pop",
-    "translations": {
-    }
-  }
 ]

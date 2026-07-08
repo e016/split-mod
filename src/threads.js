@@ -4303,7 +4303,7 @@ Process.prototype.doPlaySoundAtRate = function (name, rate) {
   return source;
 };
 
-Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
+Process.prototype.reportGetSoundAttribute = function (choice, soundName, noContext) {
   var sound =
       soundName instanceof Sound
         ? soundName
@@ -4321,7 +4321,7 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
   }
 
   if (!sound.audioBuffer) {
-    this.decodeSound(sound);
+    this.decodeSound(sound, null, noContext);
     return;
   }
 
@@ -4356,7 +4356,7 @@ Process.prototype.reportGetSoundAttribute = function (choice, soundName) {
   }
 };
 
-Process.prototype.decodeSound = function (sound, callback) {
+Process.prototype.decodeSound = function (sound, callback, noContext) {
   // private - callback is optional and invoked with sound as argument
   var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx;
 
@@ -4386,8 +4386,10 @@ Process.prototype.decodeSound = function (sound, callback) {
       },
     );
   }
-  this.pushContext("doYield");
-  this.pushContext();
+  if (!noContext) {
+    this.pushContext("doYield");
+    this.pushContext();
+  }
 };
 
 Process.prototype.encodeSound = function (samples, rate) {
