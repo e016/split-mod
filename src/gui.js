@@ -5448,7 +5448,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     "\na Snap! mod in the style of Scratch\n\n" +
     "Copyright \u24B8 2025-2026 by d016 and codingisfun2831t\n\n" +
     "Based off of Snap 11.0.8\n" +
-    "Copyright \u24B8 2008-2025 Jens M\u00F6nig and " +
+    "Snap! Copyright \u24B8 2008-2025 Jens M\u00F6nig and " +
     "Brian Harvey\n" +
     "jens@moenig.org, bh@cs.berkeley.edu\n\n" +
     "        Snap! is developed by the University of California, " +
@@ -5457,12 +5457,12 @@ IDE_Morph.prototype.aboutSnap = function () {
     "MIOsoft and YC Research.\n" +
     "The design of Split! is influenced and inspired significantly by Scratch,\n" +
     "from the Scratch Foundation.\n\n" +
-    "for more information see https://snap.berkeley.edu";
+    "for more information about Snap! see https://snap.berkeley.edu";
 
   noticeTxt =
     localize("License") +
     "\n\n" +
-    "Snap! is free software: you can redistribute it and/or modify\n" +
+    "Split! is free software: you can redistribute it and/or modify\n" +
     "it under the terms of the GNU Affero General Public License as\n" +
     "published by the Free Software Foundation, either version 3 of\n" +
     "the License, or (at your option) any later version.\n\n" +
@@ -5472,9 +5472,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     "GNU Affero General Public License for more details.\n\n" +
     "You should have received a copy of the\n" +
     "GNU Affero General Public License along with this program.\n" +
-    "If not, see http://www.gnu.org/licenses/\n\n" +
-    "Want to use Snap! but scared by the open-source license?\n" +
-    "Get in touch with us, we'll make it work.";
+    "If not, see http://www.gnu.org/licenses/";
 
   creditsTxt =
     localize("Contributors") +
