@@ -163,6 +163,7 @@ SymbolMorph.prototype.names = [
   "blockSeperator",
   "ttsIcon",
   "translateIcon",
+  "addonIcon"
 ];
 SymbolMorph.prototype.extensionSymbolNames = [
   "penIcon",
@@ -566,6 +567,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case "translateIcon":
       this.renderSymbolTranslateIcon(ctx);
       break;
+    case "addonIcon":
+      this.renderAddonIcon(ctx);
+      break;
     default:
       throw new Error('unknown symbol name: "' + this.name + '"');
   }
@@ -727,6 +731,10 @@ SymbolMorph.prototype.ttsIconSymbol = new Image();
 SymbolMorph.prototype.ttsIconSymbol.src = "src/tts-icon.svg";
 SymbolMorph.prototype.translateIconSymbol = new Image();
 SymbolMorph.prototype.translateIconSymbol.src = "src/translate-icon.png";
+SymbolMorph.prototype.addonIcon = new Image();
+SymbolMorph.prototype.addonIcon.src = "src/addon-icon.svg";
+SymbolMorph.prototype.addonIconBlack = new Image();
+SymbolMorph.prototype.addonIconBlack.src = "src/addon-icon-black.svg";
 SymbolMorph.prototype.paintBlack = new Image();
 SymbolMorph.prototype.paintBlack.src = "src/paintbucket-black.svg";
 SymbolMorph.prototype.pipette = new Image();
@@ -2810,6 +2818,9 @@ SymbolMorph.prototype.renderSymbolCommentClose = function (ctx) {
   this.drawImage(ctx, this.commentClose);
 };
 
+SymbolMorph.prototype.renderAddonIcon = function (ctx) {
+  this.drawImage(ctx, this.color.eq(BLACK) ? this.addonIconBlack : this.addonIcon);
+}
 
 /*
 // register examples with the World demo menu
