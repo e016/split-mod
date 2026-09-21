@@ -1107,6 +1107,7 @@ BlockMorph.prototype.render = function (ctx) {
 
   if (MorphicPreferences.isFlat) {
     // draw the outline
+    /*
     ctx.fillStyle = this.cachedClrDark;
     ctx.beginPath();
     this.outlinePath(ctx, 0);
