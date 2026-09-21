@@ -1106,7 +1106,7 @@ BlockMorph.prototype.render = function (ctx) {
   this.cachedClrDark = this.dark();
 
   if (MorphicPreferences.isFlat) {
-    /*// draw the outline
+    // draw the outline
     ctx.fillStyle = this.cachedClrDark;
     ctx.beginPath();
     this.outlinePath(ctx, 0);
@@ -1377,7 +1377,7 @@ HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
 
 ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
   // draw the 'flat' shape
-  console.warn(this instanceof TemplateSlotMorph)
+  //console.warn(this instanceof TemplateSlotMorph)
   var h = this.height(),
     w = this.width(),
     r =
