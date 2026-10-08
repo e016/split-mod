@@ -22,7 +22,8 @@
       base = this.color;
     }
     let isZebra = this.isZebra;
-    let color = this.colors?.tertiary || base.darker(this.contrast);
+    let color = this.colors?.tertiary || BLACK;
+    base.darker(this.contrast);
     return isZebra
       ? color.lighter(this.zebraContrast).toString()
       : color.toString();
@@ -33,7 +34,7 @@
       base = this.color;
     }
     let isZebra = this.isZebra;
-    let color = this.colors?.secondary || base.darker(this.contrast).lighter(5);
+    let color = this.colors?.secondary || BLACK; //base.darker(this.contrast * 0.9).lighter(5);
     return isZebra
       ? color.lighter(this.zebraContrast).toString()
       : color.toString();
@@ -2063,9 +2064,131 @@
         }
       }
     }
+    block.fixChildrensBlockColor();
     return block;
   };
 
+  SyntaxElementMorph.prototype.fixBlockColor = function (
+    nearestBlock,
+    isForced,
+  ) {
+    this.contrast = this instanceof BlockMorph ? 20 : this.contrast;
+    this.children.forEach((morph) => {
+      if (morph instanceof SyntaxElementMorph) {
+        morph.fixBlockColor(nearestBlock, isForced);
+      }
+      morph.isZebra = this.isZebra;
+      if (this.parent.colors) {
+        console.warn(this.parent);
+        morph.colors = Object.assign({}, this.parent.colors);
+        morph.isZebra = this.parent.isZebra;
+      }
+      if (this.colors) {
+        morph.colors = Object.assign({}, this.colors);
+        morph.isZebra = this.parent.isZebra;
+      }
+    });
+  };
+  BlockMorph.prototype.alternateBlockColor = function () {
+    var clr = SpriteMorph.prototype.blockColorFor(this.category);
+
+    if (this.color.eq(clr)) {
+      this.setColor(
+        this.zebraContrast < 0
+          ? clr.darker(Math.abs(this.zebraContrast))
+          : clr.lighter(this.zebraContrast),
+        this.hasLabels(), // silently
+      );
+    } else {
+      this.setColor(clr, this.hasLabels()); // silently
+    }
+    this.isZebra = !this.isZebra;
+    this.fixLabelColor();
+    this.fixChildrensBlockColor(true); // has issues if not forced
+  };
+  BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
+    var nearest = nearestBlock,
+      clr,
+      cslot;
+
+    if (!this.zebraContrast && !isForced) {
+      return;
+    }
+    if (!this.zebraContrast && isForced) {
+      this.isZebra = false;
+      return this.forceNormalColoring();
+    }
+
+    if (!nearest) {
+      if (this.parent) {
+        if (this.isPrototype) {
+          nearest = null; // this.parent; // the PrototypeHatBlockMorph
+        } else if (this instanceof ReporterBlockMorph) {
+          nearest = this.parent.parentThatIsA(BlockMorph);
+        } else {
+          // command
+          cslot = this.parentThatIsA(CommandSlotMorph, ReporterSlotMorph);
+          if (cslot) {
+            nearest = cslot.parentThatIsA(BlockMorph);
+          }
+        }
+      }
+    }
+    if (!nearest) {
+      // top block
+      clr = SpriteMorph.prototype.blockColorFor(this.category);
+      if (!this.color.eq(clr)) {
+        this.alternateBlockColor();
+      }
+    } else if (nearest.category === this.category) {
+      if (nearest.color.eq(this.color)) {
+        this.alternateBlockColor();
+      }
+    } else if (
+      this.category &&
+      !this.color.eq(SpriteMorph.prototype.blockColorFor(this.category))
+    ) {
+      this.alternateBlockColor();
+    }
+    if (this.isHighContrast) {
+      this.alternateBlockColor();
+    }
+    if (isForced) {
+      this.fixChildrensBlockColor(true);
+    }
+  };
+
+  BlockMorph.prototype.forceNormalColoring = function () {
+    this.isZebra = false;
+    var clr = SpriteMorph.prototype.blockColorFor(this.category);
+    this.setColor(clr);
+    this.colors = SpriteMorph.prototype.blockColorsFor(this.category);
+    this.setLabelColor(
+      WHITE,
+      clr.darker(this.labelContrast),
+      MorphicPreferences.isFlat ? ZERO : this.embossing,
+    );
+    this.fixChildrensBlockColor(true);
+    if (this.isHighContrast) {
+      this.alternateBlockColor();
+    }
+  };
+  BlockMorph.prototype.fixChildrensBlockColor = function (isForced) {
+    this.children.forEach((morph) => {
+      if (morph instanceof CommandBlockMorph) {
+        morph.fixBlockColor(null, isForced);
+      } else if (morph instanceof SyntaxElementMorph) {
+        morph.fixBlockColor(this, isForced);
+        if (morph instanceof BooleanSlotMorph) {
+          morph.fixLayout();
+        }
+      }
+      if (!(morph instanceof BlockMorph)) {
+        morph.isZebra = this.isZebra;
+        morph.colors = this.colors;
+      }
+    });
+  };
   ArgMorph.prototype.fixLayout = function () {
     if (this.icon) {
       if (this.type === "process") {
@@ -2093,7 +2216,27 @@
       ArgMorph.uber.fixLayout.call(this);
     }
   };
-
+  TemplateSlotMorph.prototype.init = function (name) {
+    var template = new ReporterBlockMorph();
+    this.labelString = name || "";
+    template.isDraggable = false;
+    template.isTemplate = true;
+    if (modules.objects !== undefined) {
+      template.color = SpriteMorph.prototype.blockColor.variables;
+      template.colors = SpriteMorph.prototype.blockColors.variables;
+      template.category = "variables";
+    } else {
+      template.color = new Color(243, 118, 29);
+      template.category = null;
+    }
+    template.setSpec(this.labelString);
+    template.selector = "reportGetVar";
+    TemplateSlotMorph.uber.init.call(this);
+    this.add(template);
+    this.fixLayout();
+    this.isDraggable = false;
+    this.isStatic = true; // I cannot be exchanged
+  };
   TemplateSlotMorph.prototype.render = function (ctx) {
     if (this.parent instanceof Morph) {
       this.color = this.parent.color.copy();
@@ -2112,9 +2255,11 @@
     } else if (part instanceof StringMorph) {
       part.isBold = !part.isBold;
       part.fixLayout();
+    } else if (part instanceof RingMorph) {
+      part.colors = SpriteMorph.prototype.blockColors.other;
     }
     return part;
-  }
+  };
 
   CSlotMorph.prototype.fixLoopLayout = function () {
     var loop;
@@ -2186,29 +2331,26 @@
     this.drawImage(ctx, "fileSymbol");
   };
   SymbolMorph.prototype.renderSymbolEdit = function (ctx, color) {
-    this.drawImage(
-      ctx,
-      "editSymbol"
-    );
+    this.drawImage(ctx, "editSymbol");
   };
   SymbolMorph.prototype.renderSymbolGrow = function (ctx) {
     this.drawImage(ctx, "grow");
-  }
+  };
   SymbolMorph.prototype.renderSymbolShrink = function (ctx) {
     this.drawImage(ctx, "shrink");
-  }
+  };
   SymbolMorph.prototype.renderSymbolFullScreen = function (ctx) {
     this.drawImage(ctx, "grow");
-  }
+  };
   SymbolMorph.prototype.renderSymbolNormalScreen = function (ctx) {
     this.drawImage(ctx, "shrink");
-  }
+  };
   SymbolMorph.prototype.renderSymbolPaintbucket = function (ctx, color) {
     this.drawImage(ctx, "paint");
-  }
+  };
   SymbolMorph.prototype.renderSymbolEraser = function (ctx) {
     this.drawImage(ctx, "eraser");
-  }
+  };
   let originalSymbolWidth = SymbolMorph.prototype.symbolWidth;
   SymbolMorph.prototype.symbolWidth = function () {
     let result = originalSymbolWidth.call(this),
