@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Split! (userscript version)
 // @namespace    http://github.com/e016/split-mod
-// @version      2026-9-26
+// @version      2026-10-8
 // @description  Make Snap! look like Scratch
 // @author       d016
 // @match        https://snap.berkeley.edu/snap/*
@@ -2101,6 +2101,31 @@
     this.alwaysRound = true;
     BlockMorph.prototype.render.call(this, ctx);
   };
+  let originalLabelPart = SyntaxElementMorph.prototype.labelPart;
+  SyntaxElementMorph.prototype.labelPart = function (spec) {
+    let part = originalLabelPart.call(this, spec);
+    if (part.isLoop) {
+      let labelPart = part.children[0];
+      labelPart.changed();
+      labelPart.size = labelPart.size * 2;
+      labelPart.fixLayout();
+    } else if (part instanceof StringMorph) {
+      part.isBold = !part.isBold;
+      part.fixLayout();
+    }
+    return part;
+  }
+
+  CSlotMorph.prototype.fixLoopLayout = function () {
+    var loop;
+    if (this.isLoop) {
+      loop = this.loop();
+      if (loop) {
+        loop.setRight(this.right() - this.corner);
+        loop.setBottom(this.bottom() + this.cSlotPadding + this.edge * 5);
+      }
+    }
+  };
 
   SymbolMorph.prototype.drawImage = function (ctx, image) {
     let _debug_name;
@@ -2160,6 +2185,30 @@
   SymbolMorph.prototype.renderSymbolFile = function (ctx) {
     this.drawImage(ctx, "fileSymbol");
   };
+  SymbolMorph.prototype.renderSymbolEdit = function (ctx, color) {
+    this.drawImage(
+      ctx,
+      "editSymbol"
+    );
+  };
+  SymbolMorph.prototype.renderSymbolGrow = function (ctx) {
+    this.drawImage(ctx, "grow");
+  }
+  SymbolMorph.prototype.renderSymbolShrink = function (ctx) {
+    this.drawImage(ctx, "shrink");
+  }
+  SymbolMorph.prototype.renderSymbolFullScreen = function (ctx) {
+    this.drawImage(ctx, "grow");
+  }
+  SymbolMorph.prototype.renderSymbolNormalScreen = function (ctx) {
+    this.drawImage(ctx, "shrink");
+  }
+  SymbolMorph.prototype.renderSymbolPaintbucket = function (ctx, color) {
+    this.drawImage(ctx, "paint");
+  }
+  SymbolMorph.prototype.renderSymbolEraser = function (ctx) {
+    this.drawImage(ctx, "eraser");
+  }
   let originalSymbolWidth = SymbolMorph.prototype.symbolWidth;
   SymbolMorph.prototype.symbolWidth = function () {
     let result = originalSymbolWidth.call(this),
@@ -2169,6 +2218,8 @@
       case "turnLeft":
       case "file":
         return size;
+      case "loop":
+        return size * 1.1;
     }
     return result || 0;
   };
@@ -2184,7 +2235,7 @@
     "arrowOutImage",
     "loopSymbol",
     "selectImage",
-    "shrinkImage",
+    "shrink",
     "grow",
     "brush",
     "trash",
@@ -2197,7 +2248,7 @@
   SymbolMorph.prototype.supportsGrey = [
     "settingsSymbol",
     "fileSymbol",
-    "shrinkImage",
+    "shrink",
     "grow",
     "brush",
     "trash",
@@ -2407,6 +2458,7 @@
     return;
   };
   SyntaxElementMorph.prototype.labelParts["$greenflag"].scale = 1.2;
+  SyntaxElementMorph.prototype.labelParts["$loopArrow"].scale = 0.7;
   /*
 ArrowMorph.prototype.render = function (ctx) {
   // initialize my surface property
