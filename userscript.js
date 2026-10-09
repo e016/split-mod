@@ -2078,12 +2078,12 @@
         morph.fixBlockColor(nearestBlock, isForced);
       }
       morph.isZebra = this.isZebra;
-      if (this.parent.colors) {
+      if (this.parent.colors && !(morph instanceof BlockMorph)) {
         console.warn(this.parent);
         morph.colors = Object.assign({}, this.parent.colors);
         morph.isZebra = this.parent.isZebra;
       }
-      if (this.colors) {
+      if (this.colors && !(morph instanceof BlockMorph)) {
         morph.colors = Object.assign({}, this.colors);
         morph.isZebra = this.parent.isZebra;
       }
