@@ -2079,7 +2079,6 @@
       }
       morph.isZebra = this.isZebra;
       if (this.parent.colors && !(morph instanceof BlockMorph)) {
-        console.warn(this.parent);
         morph.colors = Object.assign({}, this.parent.colors);
         morph.isZebra = this.parent.isZebra;
       }
@@ -2273,27 +2272,18 @@
   };
 
   SymbolMorph.prototype.drawImage = function (ctx, image) {
-    let _debug_name;
     if (typeof image === "string") {
-      _debug_name = image;
       if (this.supportsBlack.includes(image) && this.color.eq(BLACK)) {
-        _debug_name = image + "Black";
         image = this[image + "Black"];
       } else {
         if (this.supportsGrey.includes(image) && this.color.eq(BLACK)) {
-          _debug_name = image + "Grey";
           image = this[image + "Grey"];
         } else {
           image = this[image];
         }
       }
     }
-    try {
-      ctx.drawImage(image, 0, 0, this.width(), this.height());
-    } catch (e) {
-      console.warn(_debug_name);
-      throw new Error(e);
-    }
+    ctx.drawImage(image, 0, 0, this.width(), this.height());
   };
   SymbolMorph.prototype.renderSymbolFlag = function (ctx) {
     this.drawImage(
